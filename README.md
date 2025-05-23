@@ -1,203 +1,217 @@
-# CartoonMe iOS App
+# CartoonMe V2 - AI Photo Transformation
 
-CartoonMe is an iOS SwiftUI app that transforms photos into various cartoon styles using AI image generation.
+Transform your photos into stunning cartoon styles using **OpenAI's GPT-image-1** model! CartoonMe V2 is a completely rewritten iOS SwiftUI app that brings professional-grade AI image transformation to your fingertips.
 
-## 🎨 Features
+## ✨ What's New in V2
 
-- Transform photos into 6 different cartoon styles:
-  - Studio Ghibli
-  - The Simpsons
-  - Disney 3D
-  - Anime Style
-  - Comic Book
-  - Realistic Cartoon
+### 🚀 **OpenAI GPT-image-1 Integration**
+- **Latest AI Technology**: Uses OpenAI's newest image generation model (same as ChatGPT)
+- **Superior Quality**: Professional-grade cartoon transformations
+- **Smart Analysis**: GPT-4o analyzes your photos for optimal style application
+- **Privacy-Safe**: Conservative prompts that respect content policies
 
-- Smart person detection for optimized prompts
-- Real-time progress simulation during generation
-- In-app image expansion and sharing
-- Export functionality with iOS share sheet
+### 🎨 **7 Cartoon Styles**
+Transform photos into:
+- **Studio Ghibli** - Dreamy anime watercolor style
+- **The Simpsons** - Classic 2D cartoon look
+- **Disney 3D** - Modern animated movie style
+- **Modern Anime** - Contemporary Japanese animation
+- **Comic Book** - Bold comic illustration
+- **Semi-Realistic** - Stylized but detailed cartoon
+- **Generic Cartoon** - Versatile cartoon style
 
-## 🚀 Recent Updates
+### 🔧 **Technical Improvements**
+- **Two-Step Processing**: Image analysis → Style generation
+- **Enhanced Structure Preservation**: Maintains pose, composition, and details
+- **Progress Simulation**: Real-time visual effects during generation
+- **Moderation Compliant**: Built-in safety measures for content approval
+- **Cost Optimized**: Efficient API usage with gpt-4o-mini for analysis
 
-### OpenAI GPT-Image-1 Integration
+## 📱 Features
 
-**Branch:** `experiment-openai-gpt-image-1`
+### Core Functionality
+- **Photo Import**: Camera or photo library
+- **Real-time Preview**: Progress simulation with Core Image filters
+- **High Quality Output**: 1024x1024 resolution results
+- **Share Integration**: Built-in iOS share sheet
+- **Dynamic Island**: Live Activities for processing status
+- **Widget Support**: Home screen widget for quick access
 
-We've successfully implemented OpenAI's newest **`gpt-image-1`** model, which was released in April 2025. This is the same model that powers ChatGPT's image generation capabilities.
+### Smart Processing
+- **Person Detection**: Optimized prompts for photos with people
+- **Camera Angle Analysis**: Preserves original perspective and framing
+- **Color Preservation**: Maintains important color elements
+- **Composition Retention**: Keeps spatial relationships intact
 
-#### **The Correct Implementation: gpt-image-1**
-- **Model**: `"gpt-image-1"` (OpenAI's latest image generation model)
-- **Endpoint**: `/v1/images/generations` (proper image generation endpoint)
-- **Input**: Text prompts only (this is a text-to-image model, not image-to-image)
-- **Output**: Base64 encoded images in structured JSON format
-- **Quality**: Same high-quality results as ChatGPT's interface
-
-#### **How It Works:**
-1. **Smart Prompting**: Enhanced prompts optimized for each cartoon style
-2. **Person Detection**: Vision framework detects people for better prompt optimization
-3. **Style-Specific Parameters**: Each theme (Studio Ghibli, Disney, etc.) has custom prompts
-4. **Progress Simulation**: Real-time visual effects during generation
-5. **High-Quality Output**: 1024x1024 resolution with excellent detail
-
-#### **Important Note about Structure Preservation:**
-The `gpt-image-1` model is a **text-to-image generator**, not an image-to-image transformer. This means:
-- ✅ Creates beautiful, high-quality cartoon images
-- ✅ Follows style instructions very well  
-- ❌ Cannot directly preserve your original photo's structure
-- ❌ Creates new compositions based on text descriptions
-
-For **structure-preserving transformations** (like ChatGPT's interface appears to do), you would need image-to-image capabilities that are not yet available via OpenAI's public APIs.
-
-#### **Alternatives for Structure Preservation:**
-1. **Stability AI ControlNet** (main branch): ✅ True image-to-image transformation
-2. **Wait for OpenAI's Image-to-Image API**: 🕐 Not yet released publicly
-3. **Enhanced Prompting**: ⚠️ Describe your photo in detail (current approach)
-
-## 🔧 Setup Instructions
+## 🛠 Setup Instructions
 
 ### Prerequisites
-- Xcode 15.0+
-- iOS 18.2+ deployment target
-- OpenAI API account with access to `gpt-image-1`
+- **Xcode 15.0+**
+- **iOS 18.2+ deployment target**
+- **OpenAI API account** with gpt-image-1 access
 
 ### API Configuration
 
-#### For OpenAI GPT-Image-1 (experiment-openai-gpt-image-1 branch):
-
 1. **Get OpenAI API Access:**
-   - Create an account at [OpenAI Platform](https://platform.openai.com)
-   - Complete identity verification for `gpt-image-1` access
-   - Generate an API key from your dashboard
+   - Create account at [OpenAI Platform](https://platform.openai.com)
+   - Complete identity verification for gpt-image-1 access
+   - Generate API key from dashboard
 
-2. **Set Environment Variable:**
+2. **Configure Environment Variables:**
+   
+   **Method 1: Xcode Environment Variables (Recommended)**
+   ```
+   1. In Xcode: Product → Scheme → Edit Scheme
+   2. Select "Run" → "Environment Variables"
+   3. Add: OPENAI_API_KEY = your-api-key-here
+   ```
+
+   **Method 2: Terminal Export**
    ```bash
    export OPENAI_API_KEY="your-api-key-here"
    ```
 
-3. **Alternative Setup:**
-   - Edit `CartoonMe/Services/ImageProcessor.swift`
-   - Replace `"YOUR_FALLBACK_API_KEY"` with your actual API key
-   - ⚠️ **Note**: This is less secure than environment variables
-
-#### For Stability AI (main branch):
-
-1. **Get Stability AI API Access:**
-   - Create account at [Stability AI Platform](https://platform.stability.ai)
-   - Generate API key
-
-2. **Set Environment Variable:**
-   ```bash
-   export STABILITY_API_KEY="your-api-key-here"
-   ```
-
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
-   cd CartoonMe
+   git clone https://github.com/yuripetrosyan/CartoonMeV2.git
+   cd CartoonMeV2
    ```
 
-2. Switch to the OpenAI branch (recommended):
-   ```bash
-   git checkout experiment-openai-gpt-image-1
-   ```
-
-3. Open in Xcode:
+2. **Open in Xcode:**
    ```bash
    open CartoonMe.xcodeproj
    ```
 
-4. Build and run on your iOS device or simulator
+3. **Set API Key** (see configuration above)
 
-## 📱 Usage
+4. **Build and Run** on your iOS device or simulator
 
-1. **Select a Photo**: Tap the photo placeholder to choose an image from your library
-2. **Choose a Style**: Select from the 6 available cartoon styles
-3. **Generate**: Tap "Cartoon It!" to start the transformation
-4. **View Results**: The generated image appears with progress simulation
-5. **Export**: Tap the blue "Export" button to share your cartoon
+## 🎯 Usage
+
+1. **Launch CartoonMe** on your iOS device
+2. **Tap "Pick a photo"** to select an image
+3. **Choose your style** from the 7 available options
+4. **Tap "Cartoon It!"** to start transformation
+5. **Watch the progress** with real-time effects
+6. **View your result** and export/share
 
 ## 🏗 Technical Architecture
 
 ### Core Components
+- **`ImageStylizer`**: Main processing engine with OpenAI integration
+- **`ContentView`**: SwiftUI interface and state management
+- **`ArtStyle`**: Enum defining 7 cartoon styles with optimized prompts
+- **`ProgressStreamer`**: Real-time visual effects simulation
+- **Vision Framework**: Person detection for prompt optimization
 
-- **ContentView.swift**: Main UI and state management
-- **ImageProcessor.swift**: AI API integration and image processing
-- **ShareSheet.swift**: iOS share functionality
-- **Vision Framework**: Person detection for optimized prompts
+### API Integration Flow
+```
+1. Image Analysis (GPT-4o-mini)
+   ↓ Privacy-safe scene description
+2. Prompt Composition 
+   ↓ Style + description + safety measures
+3. Image Generation (gpt-image-1)
+   ↓ High-quality cartoon transformation
+4. Result Processing
+   ↓ Display and sharing options
+```
 
-### API Integration
+### Safety & Privacy
+- **No facial recognition**: Generic "subject" references only
+- **Content filtering**: Built-in moderation compliance  
+- **Local processing**: Images analyzed securely via OpenAI API
+- **No data storage**: No images stored on servers
 
-#### OpenAI GPT-Image-1 Flow:
-1. Image resizing and orientation fixing
-2. Person detection using Vision framework  
-3. Dynamic prompt generation based on detected content
-4. JSON API request to OpenAI's `/images/generations` endpoint
-5. Base64 image decoding and display
+## 🔄 Version History
 
-#### Progress Simulation:
-- Real-time visual effects during generation
-- Pixelation, blur, and enhancement filters
-- Smooth progress from 0% to 100%
+### V2.0 (Current) - OpenAI Implementation
+- Complete rewrite with OpenAI GPT-image-1
+- Enhanced structure preservation
+- 7 optimized cartoon styles
+- Privacy-safe processing
+- Dynamic Island integration
 
-## 🔄 Branch Comparison
+### V1.0 - Stability AI Implementation
+- Initial release with Stability AI ControlNet
+- Basic cartoon transformation
+- Limited style options
 
-| Feature | Main Branch (Stability AI) | Experiment Branch (OpenAI) |
-|---------|---------------------------|----------------------------|
-| **API Provider** | Stability AI ControlNet | OpenAI gpt-image-1 |
-| **Request Format** | Multipart form data | JSON payload |
-| **Image Quality** | High detail, structural control | Excellent prompt adherence |
-| **Speed** | ~30-60 seconds | ~15-30 seconds |
-| **Cost** | Variable by resolution | ~1/3 cost of GPT-4 |
-| **Text Rendering** | Good | Excellent |
-| **Setup Complexity** | Moderate | Simple |
+## 🎨 Style Examples
 
-## 🐛 Troubleshooting
+Each style is optimized for different artistic preferences:
 
-### Common Issues:
+- **Studio Ghibli**: Soft watercolors, dreamy atmosphere, hand-painted feel
+- **Simpsons**: Bold outlines, flat colors, classic TV animation
+- **Disney 3D**: Modern CGI, family-friendly, bright lighting
+- **Modern Anime**: Clean lines, cel shading, contemporary feel
+- **Comic Book**: Bold illustrations, dramatic styling
+- **Semi-Realistic**: Detailed but stylized, best of both worlds
+- **Generic Cartoon**: Versatile style for any photo type
 
-1. **"Missing API Key" Error:**
-   - Ensure your API key is properly set in environment variables
-   - Check that the key has proper permissions
+## 🚨 Troubleshooting
 
-2. **"Network Error":**
-   - Verify internet connection
-   - Check API key validity
-   - Ensure account has sufficient credits
+### Common Issues
 
-3. **"Model Access Error":**
-   - Confirm your OpenAI account is verified for `gpt-image-1`
-   - Check billing status and usage limits
+**"Missing API Key" Error:**
+- Ensure OPENAI_API_KEY is set in Xcode environment variables
+- Check API key validity on OpenAI platform
 
-4. **UIKit Import Error:**
-   - This is typically a development environment issue
-   - Clean build folder (⌘+Shift+K) and rebuild
-   - Restart Xcode if necessary
+**"Safety System" Block:**
+- Try a different photo or simpler composition
+- Ensure photo doesn't contain restricted content
+- Use generic scenes for best results
+
+**"Network Error":**
+- Check internet connection
+- Verify OpenAI account has sufficient credits
+- Confirm API key permissions
+
+**Build Errors:**
+- Clean build folder (⌘+Shift+K)
+- Restart Xcode
+- Check iOS deployment target (18.2+)
+
+## 💡 Tips for Best Results
+
+- **Use clear, well-lit photos** for optimal analysis
+- **Simple compositions** work better than complex scenes
+- **Avoid copyrighted characters** in source photos
+- **Generic clothing/settings** are safer for content moderation
+- **Portrait orientation** often gives better results
 
 ## 📄 License
 
-This project is available for educational and personal use. Please ensure you comply with the respective AI service terms of use.
+This project is available for educational and personal use. Please ensure compliance with OpenAI's terms of service when using their APIs.
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
+4. Test thoroughly with different photo types
 5. Submit a pull request
 
 ## 📞 Support
 
 For issues or questions:
 1. Check the troubleshooting section above
-2. Review OpenAI's [API documentation](https://platform.openai.com/docs)
+2. Review [OpenAI's API documentation](https://platform.openai.com/docs)
 3. Open an issue in this repository
+
+## 🌟 Future Plans
+
+- **Additional art styles** (Pixar, Manga, etc.)
+- **Batch processing** for multiple photos
+- **Style intensity controls** for fine-tuning
+- **Custom style creation** tools
+- **Enhanced preview system**
 
 ---
 
-**Current Version**: 2.0.0-experimental  
-**Last Updated**: December 2024  
-**iOS Support**: iOS 18.2+
+**CartoonMe V2** - Transform your world into art! 🎨✨
+
+*Powered by OpenAI GPT-image-1 | Built with SwiftUI | Made with ❤️*
 
   
