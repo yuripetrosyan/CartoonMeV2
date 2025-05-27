@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "idiom" : "universal"
-    },
-    {
-      "filename" : "HouseImage 1.png",
+      "filename" : "MangaImage.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

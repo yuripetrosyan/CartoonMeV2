@@ -1,10 +1,7 @@
 {
   "images" : [
     {
-      "idiom" : "universal"
-    },
-    {
-      "filename" : "HouseImage 1.png",
+      "filename" : "PixarImage.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

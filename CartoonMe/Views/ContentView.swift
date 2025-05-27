@@ -83,140 +83,141 @@ struct ContentView: View {
                 .transition(.opacity)
                 .zIndex(2)
             } else {
-                ScrollView {
-                    VStack(spacing: 28) {
-                        // Title
-                        HStack(spacing: 12) {
-                            if let logo = selectedTheme.logo, !logo.isEmpty {
-                                Image(logo)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 36, height: 36)
-                            }
-                            Text(selectedTheme.name)
-                                .font(.title.bold())
-                                .foregroundColor(.white)
+                VStack(spacing: 0) {
+                    // Title Section
+                    HStack(spacing: 12) {
+                        if let logo = selectedTheme.logo, !logo.isEmpty {
+                            Image(logo)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 36, height: 36)
                         }
-                        .padding(.top, 16)
-                        // Image Preview Card
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                                .fill(.ultraThinMaterial)
-                                .frame(height: 260)
-                                .shadow(color: .black.opacity(0.18), radius: 16, x: 0, y: 8)
-                            if let selectedImage = selectedImage {
-                                Image(uiImage: selectedImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 220)
-                                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                            } else {
-                                VStack(spacing: 8) {
-                                    Image(systemName: "photo")
-                                        .font(.system(size: 44, weight: .light))
-                                        .foregroundColor(.white.opacity(0.7))
-                                    Text("Pick a photo")
-                                        .foregroundColor(.white.opacity(0.7))
-                                        .font(.headline)
-                                }
+                        Text(selectedTheme.name)
+                            .font(.title.bold())
+                            .foregroundColor(.white)
+                    }
+                    .padding(.top, 20)
+                    .padding(.bottom, 24)
+                    
+                    // Image Preview Card
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .frame(height: 260)
+                            .shadow(color: .black.opacity(0.18), radius: 16, x: 0, y: 8)
+                        if let selectedImage = selectedImage {
+                            Image(uiImage: selectedImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 220)
+                                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        } else {
+                            VStack(spacing: 8) {
+                                Image(systemName: "photo")
+                                    .font(.system(size: 44, weight: .light))
+                                    .foregroundColor(.white.opacity(0.7))
+                                Text("Pick a photo")
+                                    .foregroundColor(.white.opacity(0.7))
+                                    .font(.headline)
                             }
                         }
-                        .padding(.horizontal, 24)
-                        // Action Buttons Card
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                                .fill(.ultraThinMaterial)
-                                .shadow(color: .black.opacity(0.10), radius: 10, x: 0, y: 4)
-                            HStack(spacing: 18) {
-                                Button(action: { showingImagePicker = true }) {
+                    }
+                    .padding(.horizontal, 24)
+                    
+                    // Fixed spacing between image and buttons
+                    Spacer()
+                        .frame(height: 24)
+                    
+                    // Action Buttons - Compact layout
+                    HStack(spacing: 18) {
+                        Button(action: { showingImagePicker = true }) {
+                            HStack {
+                                Image(systemName: "plus.circle")
+                                Text("Choose Photo")
+                            }
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 20)
+                            .background(
+                                Capsule().fill(selectedTheme.color.opacity(0.7))
+                            )
+                        }
+                        .onChange(of: selectedImage) { _ in // Reset processedImage when a new image is selected
+                            if processedImage != nil {
+                                processedImage = nil
+                                progressImage = nil
+                                progressValue = 0
+                            }
+                        }
+                        
+                        if processedImage == nil {
+                            if isProcessing {
+                                // Cancel button when processing
+                                Button(action: { 
+                                    cancelProcessing = true
+                                    isProcessing = false
+                                    progressImage = nil
+                                    progressValue = 0
+                                    
+                                    // Cancel the Dynamic Island activity
+                                    CartoonProcessingManager.shared.cancelActivity()
+                                }) {
                                     HStack {
-                                        Image(systemName: "plus.circle")
-                                        Text("Choose Photo")
+                                        Image(systemName: "xmark.circle")
+                                        Text("Cancel")
                                     }
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                    .padding(.vertical, 10)
-                                    .padding(.horizontal, 18)
+                                    .padding(.vertical, 12)
+                                    .padding(.horizontal, 20)
                                     .background(
-                                        Capsule().fill(selectedTheme.color.opacity(0.7))
+                                        Capsule().fill(Color.red.opacity(0.7))
                                     )
                                 }
-                                .onChange(of: selectedImage) { _ in // Reset processedImage when a new image is selected
-                                    if processedImage != nil {
-                                        processedImage = nil
-                                        progressImage = nil
-                                        progressValue = 0
+                            } else {
+                                // Cartoon It button
+                                Button(action: { processImage() }) {
+                                    HStack {
+                                        Image(systemName: "wand.and.stars")
+                                        Text("Cartoon It!")
                                     }
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 12)
+                                    .padding(.horizontal, 20)
+                                    .background(
+                                        Capsule().fill(Color.green.opacity(selectedImage == nil ? 0.3 : 0.7))
+                                    )
                                 }
-                                
-                                if processedImage == nil {
-                                    if isProcessing {
-                                        // Cancel button when processing
-                                        Button(action: { 
-                                            cancelProcessing = true
-                                            isProcessing = false
-                                            progressImage = nil
-                                            progressValue = 0
-                                            
-                                            // Cancel the Dynamic Island activity
-                                            CartoonProcessingManager.shared.cancelActivity()
-                                        }) {
-                                            HStack {
-                                                Image(systemName: "xmark.circle")
-                                                Text("Cancel")
-                                            }
-                                            .font(.headline)
-                                            .foregroundColor(.white)
-                                            .padding(.vertical, 10)
-                                            .padding(.horizontal, 18)
-                                            .background(
-                                                Capsule().fill(Color.red.opacity(0.7))
-                                            )
-                                        }
-                                    } else {
-                                        // Cartoon It button
-                                        Button(action: { processImage() }) {
-                                            HStack {
-                                                Image(systemName: "wand.and.stars")
-                                                Text("Cartoon It!")
-                                            }
-                                            .font(.headline)
-                                            .foregroundColor(.white)
-                                            .padding(.vertical, 10)
-                                            .padding(.horizontal, 18)
-                                            .background(
-                                                Capsule().fill(Color.green.opacity(selectedImage == nil ? 0.3 : 0.7))
-                                            )
-                                        }
-                                        .disabled(selectedImage == nil)
-                                    }
-                                } else {
-                                    // Share/Export button when image processed
-                                    Button(action: { 
-                                        if let image = processedImage {
-                                            self.imageToShare = image
-                                            self.showingShareSheet = true
-                                        }
-                                    }) { 
-                                        HStack {
-                                            Image(systemName: "square.and.arrow.up")
-                                            Text("Share")
-                                        }
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                        .padding(.vertical, 10)
-                                        .padding(.horizontal, 18)
-                                        
-                                        .background(
-                                            Capsule().fill(Color.blue.opacity(0.7))
-                                        )
-                                    }
-                                }
+                                .disabled(selectedImage == nil)
                             }
-                            .padding(.vertical, 8)
+                        } else {
+                            // Share/Export button when image processed
+                            Button(action: { 
+                                if let image = processedImage {
+                                    self.imageToShare = image
+                                    self.showingShareSheet = true
+                                }
+                            }) { 
+                                HStack {
+                                    Image(systemName: "square.and.arrow.up")
+                                    Text("Share")
+                                }
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding(.vertical, 12)
+                                .padding(.horizontal, 20)
+                                .background(
+                                    Capsule().fill(Color.blue.opacity(0.7))
+                                )
+                            }
                         }
-                        .padding(.horizontal, 24)
-                        
+                    }
+                    .padding(.horizontal, 24)
+                    
+                    // Progress and Result Section
+                    VStack(spacing: 20) {
                         // Progress Visualization
                         if isProcessing {
                             VStack(spacing: 12) {
@@ -249,7 +250,6 @@ struct ContentView: View {
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                 }
-                                .padding(.bottom, 10)
                             }
                         }
                         
@@ -273,9 +273,11 @@ struct ContentView: View {
                             }
                             .padding(.horizontal, 24)
                         }
-                        Spacer()
-                    }.padding(.bottom, 100)
+                    }
+                    .padding(.top, 24)
                     
+                    // Bottom spacer to push content up and maintain layout
+                    Spacer()
                 }
                 
                 .sheet(isPresented: $showingImagePicker) {

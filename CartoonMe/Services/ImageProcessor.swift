@@ -255,6 +255,8 @@ public final class ImageStylizer {
 
     /// Hit gpt-image-1 with the image-to-image edit endpoint using multipart/form-data.
     private func generate(with prompt: String, referenceImage: UIImage) async throws -> UIImage {
+        // Calculate optimal dimensions maintaining aspect ratio
+        let targetSize = calculateOptimalSize(for: referenceImage.size)
         let editURL = URL(string: "https://api.openai.com/v1/images/edits")!
         var lastError: Error?
         for attempt in 1...2 {
@@ -282,7 +284,11 @@ public final class ImageStylizer {
                 // Add size
                 body.append("--\(boundary)\r\n".data(using: .utf8)!)
                 body.append("Content-Disposition: form-data; name=\"size\"\r\n\r\n".data(using: .utf8)!)
-                body.append("1024x1024\r\n".data(using: .utf8)!)
+                body.append("\(Int(targetSize.width))x\(Int(targetSize.height))\r\n".data(using: .utf8)!)
+                // Add quality (medium = cheaper than hd)
+                body.append("--\(boundary)\r\n".data(using: .utf8)!)
+                body.append("Content-Disposition: form-data; name=\"quality\"\r\n\r\n".data(using: .utf8)!)
+                body.append("medium\r\n".data(using: .utf8)!)
                 // End boundary
                 body.append("--\(boundary)--\r\n".data(using: .utf8)!)
                 // Create request
@@ -326,6 +332,35 @@ public final class ImageStylizer {
     }
 
     // MARK: – Private helpers ----------------------------------------------------
+    
+    /// Calculate optimal output dimensions from supported API sizes
+    private func calculateOptimalSize(for originalSize: CGSize) -> CGSize {
+        // API only supports these specific sizes
+        let supportedSizes: [CGSize] = [
+            CGSize(width: 1024, height: 1024),  // Square
+            CGSize(width: 1024, height: 1536),  // Portrait
+            CGSize(width: 1536, height: 1024)   // Landscape
+        ]
+        
+        // Calculate aspect ratio of original image
+        let originalAspectRatio = originalSize.width / originalSize.height
+        
+        // Find the supported size that best matches the original aspect ratio
+        var bestSize = supportedSizes[0] // Default to square
+        var smallestAspectRatioDifference: CGFloat = .greatestFiniteMagnitude
+        
+        for size in supportedSizes {
+            let sizeAspectRatio = size.width / size.height
+            let aspectRatioDifference = abs(originalAspectRatio - sizeAspectRatio)
+            
+            if aspectRatioDifference < smallestAspectRatioDifference {
+                smallestAspectRatioDifference = aspectRatioDifference
+                bestSize = size
+            }
+        }
+        
+        return bestSize
+    }
     /// Ask GPT-4o to describe the scene in neutral, privacy-safe terms.
     private func describe(_ img: UIImage) async throws -> (text: String, person: Bool) {
         let jpeg = img.jpegData(compressionQuality: 0.85)!
@@ -345,13 +380,13 @@ public final class ImageStylizer {
         """
 
         let body: [String: Any] = [
-            "model": "gpt-4o", // cheaper but still strong vision
+            "model": "gpt-4o-mini", // much cheaper alternative to gpt-4o
             "messages": [[
                 "role": "user",
                 "content": [["type": "text", "text": visionPrompt],
                              ["type": "image_url", "image_url": ["url": "data:image/jpeg;base64,\(b64)", "detail": "low"]]]
             ]],
-            "max_tokens": 450,
+            "max_tokens": 300, // reduced from 450 to save costs
             "temperature": 0.8
         ]
 
@@ -485,14 +520,12 @@ class ImageProcessor {
             artStyle = .studioGhibli
         case "simpsons", "the simpsons":
             artStyle = .simpsons
-        case "disney", "disney 3d":
+        case "disney", "disney 3d", "pixar style", "pixar":
             artStyle = .disney3D
-        case "anime", "anime style", "modern anime":
+        case "anime", "anime style", "modern anime", "manga":
             artStyle = .modernAnime
-        case "comic book":
+        case "marvel comic", "marvel", "comic book":
             artStyle = .comicBook
-        case "realistic cartoon", "semi-realistic":
-            artStyle = .semiRealistic
         default:
             artStyle = .genericCartoon
         }

@@ -44,6 +44,7 @@ struct MainTabBarView: View {
     @State private var selectedTab: Tab = .explore
     @State private var tabBarOffset: CGFloat = 0
     @State private var isPressed: [Tab: Bool] = [:]
+    @State private var hideTabBar: Bool = false
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -51,7 +52,9 @@ struct MainTabBarView: View {
             Group {
                 switch selectedTab {
                 case .explore:
-                    ThemeSelectionView()
+                    NavigationStack {
+                        ThemeSelectionView(hideTabBar: $hideTabBar)
+                    }
                 case .account:
                     AccountPlaceholderView()
                 case .aiVideo:
@@ -63,9 +66,12 @@ struct MainTabBarView: View {
             .edgesIgnoringSafeArea(.all)
             
             // Modern iOS 19 Style Tab Bar
-            ModernTabBar(selectedTab: $selectedTab, isPressed: $isPressed)
-                .offset(y: tabBarOffset)
-                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: tabBarOffset)
+            if !hideTabBar {
+                ModernTabBar(selectedTab: $selectedTab, isPressed: $isPressed)
+                    .offset(y: tabBarOffset)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.8), value: tabBarOffset)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
         .onAppear {
             // Initialize pressed states

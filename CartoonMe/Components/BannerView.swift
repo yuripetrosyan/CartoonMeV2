@@ -112,5 +112,6 @@ struct BannerView: View {
         }
 
 #Preview {
-    BannerView(item: BannerItem(title: "Disney", image: "HouseImage", isNew: true, action: {}, logo: "DisneyLogo"))
+    BannerView(item: BannerItem(title: "Disney", image: "DisneyImage", isNew: true, action: {}, logo: "DisneyLogo"))
+    BannerView(item: BannerItem(title: "Studio Ghibli", image: "GhibliImage", isNew: false, action: {}, logo: nil))
 }
