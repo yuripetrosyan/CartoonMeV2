@@ -49,33 +49,35 @@ struct ThemeSelectionView: View {
                                 // Primary gradient wave
                                 LinearGradient(
                                     colors: [
-                                        .purple.opacity(0.4),
-                                        .blue.opacity(0.3),
-                                        .pink.opacity(0.2),
+                                        .purple.opacity(0.8),
+                                        .blue.opacity(0.6),
+                                        .pink.opacity(0.4),
                                         .clear
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
-                                .frame(height: 160)
-                                .blur(radius: 50)
+                                .frame(height: 90)
+                                .blur(radius: 40)
+                                .offset(y: -60)
                                 
                                 // Secondary gradient layer
                                 LinearGradient(
                                     colors: [
-                                        .cyan.opacity(0.2),
-                                        .purple.opacity(0.15),
+                                        .cyan.opacity(0.4),
+                                        .purple.opacity(0.3),
                                         .clear
                                     ],
                                     startPoint: .top,
                                     endPoint: .bottom
                                 )
-                                .frame(height: 100)
+                                .frame(height: 70)
                                 .blur(radius: 35)
-                                .offset(y: -60)
+                                .offset(y: -40)
                                 
-                                Spacer()
+                             //   Spacer()
                             }
+                           
                             
                             // Sleek text without container
                             VStack(spacing: 16) {
@@ -133,8 +135,8 @@ struct ThemeSelectionView: View {
                             }
                             .padding(.horizontal, 28)
                         }
-                        .padding(.top, 30)
-                        .padding(.bottom, 15)
+                        .padding(.top, 10)
+                        //.padding(.bottom, 15)
                         
                         // Main Themes Carousel with modern styling
                         CarouselSection(
@@ -215,38 +217,38 @@ struct ThemeSelectionView: View {
                     .padding(.bottom, 120)
                 }
             }
-            .navigationTitle("CartoonMe")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack(spacing: 16) {
-                        Button(action: {}) {
-                            Image(systemName: "magnifyingglass")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [.white, .white.opacity(0.8)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                        }
-                        
-                        Button(action: {}) {
-                            Image(systemName: "person.circle")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [.white, .white.opacity(0.8)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                        }
-                    }
-                }
-            }
+          //  .navigationTitle("CartoonMe")
+           // .navigationBarTitleDisplayMode(.inline)
+        //           .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    HStack(spacing: 16) {
+//                        Button(action: {}) {
+//                            Image(systemName: "magnifyingglass")
+//                                .font(.system(size: 18, weight: .medium))
+//                                .foregroundStyle(
+//                                    LinearGradient(
+//                                        colors: [.white, .white.opacity(0.8)],
+//                                        startPoint: .topLeading,
+//                                        endPoint: .bottomTrailing
+//                                    )
+//                                )
+//                        }
+//                        
+//                        Button(action: {}) {
+//                            Image(systemName: "person.circle")
+//                                .font(.system(size: 20, weight: .medium))
+//                                .foregroundStyle(
+//                                    LinearGradient(
+//                                        colors: [.white, .white.opacity(0.8)],
+//                                        startPoint: .topLeading,
+//                                        endPoint: .bottomTrailing
+//                                    )
+//                                )
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }
