@@ -8,9 +8,6 @@
 // ContentView.swift
 import SwiftUI
 import PhotosUI
-import UIKit // Re-adding UIKit import
-// If needed, add @testable import CartoonMe for test targets
-
 
 struct ContentView: View {
     let selectedTheme: Theme
@@ -33,12 +30,27 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            // Transparent background
+            Color.clear
+                .ignoresSafeArea()
+            
+            // Ambient background effects (keeping these for visual interest)
+            Circle()
+                .fill(selectedTheme.color.opacity(0.05))
+                .frame(width: 300, height: 300)
+                .offset(x: -150, y: -200)
+                .blur(radius: 60)
+            
+            Circle()
+                .fill(selectedTheme.color.opacity(0.03))
+                .frame(width: 400, height: 400)
+                .offset(x: 200, y: 300)
+                .blur(radius: 80)
             
             // Enlarged image view - shows directly in the main view
             if isImageExpanded, let imageToShow = processedImage {
                 ZStack {
-                    Color.black.opacity(0.9).edgesIgnoringSafeArea(.all)
+                    Color.black.opacity(0.95).edgesIgnoringSafeArea(.all)
                     
                     Image(uiImage: imageToShow)
                         .resizable()
@@ -55,10 +67,16 @@ struct ContentView: View {
                                     self.isImageExpanded = false
                                 }
                             }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 28))
-                                    .foregroundColor(.white)
-                                    .padding()
+                                ZStack {
+                                    Circle()
+                                        .fill(.ultraThinMaterial)
+                                        .frame(width: 44, height: 44)
+                                    
+                                    Image(systemName: "xmark")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundColor(.white)
+                                }
+                                .padding()
                             }
                         }
                         Spacer()
@@ -68,15 +86,24 @@ struct ContentView: View {
                             self.imageToShare = imageToShow
                             self.showingShareSheet = true
                         }) {
-                            HStack {
+                            HStack(spacing: 10) {
                                 Image(systemName: "square.and.arrow.up")
+                                    .font(.system(size: 16, weight: .semibold))
                                 Text("Share")
+                                    .font(.system(size: 16, weight: .semibold))
                             }
-                            .font(.headline)
                             .foregroundColor(.white)
-                            .padding(.vertical, 12)
-                            .padding(.horizontal, 24)
-                            .background(Capsule().fill(Color.blue.opacity(0.7)))
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 32)
+                            .background(
+                                Capsule()
+                                    .fill(.ultraThinMaterial)
+                                    .overlay(
+                                        Capsule()
+                                            .stroke(.white.opacity(0.2), lineWidth: 1)
+                                    )
+                            )
+                            .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
                         }
                         .padding(.bottom, 60)
                     }
@@ -86,299 +113,333 @@ struct ContentView: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
-                        // Title Section
-                        HStack(spacing: 14) {
-                            if let logo = selectedTheme.logo, !logo.isEmpty {
-                                Image(logo)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 36, height: 36)
-                            }
-                            Text(selectedTheme.name)
-                                .font(.system(size: 28, weight: .heavy, design: .rounded))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [.white, .white.opacity(0.9)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .onTapGesture {
-                                    startTestAnimation()
+                        // Title Section with enhanced styling
+                        VStack(spacing: 8) {
+                            HStack(spacing: 12) {
+                                if let logo = selectedTheme.logo, !logo.isEmpty {
+                                    Image(logo)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 32, height: 32)
                                 }
-                        }
-                        .padding(.top, 12)
-                        .padding(.bottom, 24)
-                        
-                        // Enhanced Image Preview
-                        ZStack {
-                            // Glassmorphism background
-                            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                                .fill(.ultraThinMaterial)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                                        .stroke(
-                                            LinearGradient(
-                                                colors: [.white.opacity(0.3), .clear],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            ),
-                                            lineWidth: 1
-                                        )
-                                )
-                                .frame(height: 300)
-                                .shadow(color: .black.opacity(0.25), radius: 20, x: 0, y: 10)
-                                .shadow(color: selectedTheme.color.opacity(0.2), radius: 30, x: 0, y: 15)
-                            
-                            if let selectedImage = selectedImage {
-                                Image(uiImage: selectedImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 260)
-                                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                            } else {
-                                VStack(spacing: 14) {
-                                    ZStack {
-                                        Circle()
-                                            .fill(selectedTheme.color.opacity(0.1))
-                                            .frame(width: 70, height: 70)
-                                        
-                                        Image(systemName: "photo.badge.plus")
-                                            .font(.system(size: 32, weight: .light))
-                                            .foregroundStyle(
-                                                LinearGradient(
-                                                    colors: [selectedTheme.color, selectedTheme.color.opacity(0.7)],
-                                                    startPoint: .topLeading,
-                                                    endPoint: .bottomTrailing
-                                                )
-                                            )
-                                    }
-                                    
-                                    VStack(spacing: 4) {
-                                        Text("Choose Your Photo")
-                                            .font(.system(size: 20, weight: .semibold, design: .rounded))
-                                            .foregroundColor(.white)
-                                        
-                                        Text("Select an image to transform")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .foregroundColor(.white.opacity(0.6))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    
-                    // Fixed spacing between image and buttons
-                    Spacer()
-                        .frame(height: 24)
-                    
-                    // Enhanced Action Buttons with Progress Animation
-                        ZStack {
-                            // Animated progress stroke around buttons
-                            if isProcessing {
-                                RoundedRectangle(cornerRadius: 30, style: .continuous)
-                                    .trim(from: 0, to: CGFloat(progressValue))
-                                    .stroke(
-                                        selectedTheme.color,
-                                        style: StrokeStyle(lineWidth: 5, lineCap: .round)
-                                    )
-                                    .frame(height: 70)
-                                    .padding(.horizontal, 30)
-                                    .animation(.easeInOut(duration: 0.3), value: progressValue)
-                                    .shadow(color: selectedTheme.color.opacity(0.9), radius: 6, x: 0, y: 0)
-                            }
-                            
-                            HStack(spacing: 14) {
-                            Button(action: { showingImagePicker = true }) {
-                                HStack(spacing: 10) {
-                                    Image(systemName: "plus.circle.fill")
-                                        .font(.system(size: 18, weight: .semibold))
-                                    Text("Choose Photo")
-                                        .font(.system(size: 17, weight: .semibold, design: .rounded))
-                                }
-                                .foregroundColor(.white)
-                                .padding(.vertical, 14)
-                                .padding(.horizontal, 20)
-                                .background(
-                                    Capsule()
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [selectedTheme.color, selectedTheme.color.opacity(0.8)],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
-                                        )
-                                        .shadow(color: selectedTheme.color.opacity(0.4), radius: 10, x: 0, y: 5)
-                                )
-                            }
-                    .onChange(of: selectedImage) { _ in // Reset processedImage when a new image is selected
-                        if processedImage != nil {
-                            processedImage = nil
-                            progressImage = nil
-                            progressValue = 0
-                        }
-                    }
-                    
-                    if processedImage == nil {
-                        if isProcessing {
-                                                                // Cancel button when processing
-                                Button(action: { 
-                                    cancelProcessing = true
-                                    isProcessing = false
-                                    progressImage = nil
-                                    progressValue = 0
-                                    
-                                    // Cancel the Dynamic Island activity
-                                    CartoonProcessingManager.shared.cancelActivity()
-                                }) {
-                                    HStack(spacing: 10) {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .font(.system(size: 18, weight: .semibold))
-                                        Text("Cancel")
-                                            .font(.system(size: 17, weight: .semibold, design: .rounded))
-                                    }
-                                    .foregroundColor(.white)
-                                    .padding(.vertical, 14)
-                                    .padding(.horizontal, 20)
-                                    .background(
-                                        Capsule()
-                                            .fill(
-                                                LinearGradient(
-                                                    colors: [.red, .red.opacity(0.8)],
-                                                    startPoint: .topLeading,
-                                                    endPoint: .bottomTrailing
-                                                )
-                                            )
-                                            .shadow(color: .red.opacity(0.4), radius: 10, x: 0, y: 5)
-                                    )
-                                }
-                        } else {
-                                                                // Cartoon It button
-                                Button(action: { processImage() }) {
-                                    HStack(spacing: 10) {
-                                        Image(systemName: "wand.and.stars.inverse")
-                                            .font(.system(size: 18, weight: .semibold))
-                                        Text("Cartoon It!")
-                                            .font(.system(size: 17, weight: .semibold, design: .rounded))
-                                    }
-                                    .foregroundColor(.white)
-                                    .padding(.vertical, 14)
-                                    .padding(.horizontal, 20)
-                                    .background(
-                                        Capsule()
-                                            .fill(
-                                                LinearGradient(
-                                                    colors: selectedImage == nil ? 
-                                                        [.green.opacity(0.3), .green.opacity(0.2)] :
-                                                        [.green, .green.opacity(0.8)],
-                                                    startPoint: .topLeading,
-                                                    endPoint: .bottomTrailing
-                                                )
-                                            )
-                                            .shadow(color: selectedImage == nil ? .clear : .green.opacity(0.4), radius: 10, x: 0, y: 5)
-                                    )
-                                }
-                                .disabled(selectedImage == nil)
-                        }
-                    } else {
-                        // Share/Export button when image processed
-                        Button(action: { 
-                            if let image = processedImage {
-                                self.imageToShare = image
-                                self.showingShareSheet = true
-                            }
-                        }) { 
-                            HStack(spacing: 10) {
-                                Image(systemName: "square.and.arrow.up.fill")
-                                    .font(.system(size: 18, weight: .semibold))
-                                Text("Share")
-                                    .font(.system(size: 17, weight: .semibold, design: .rounded))
-                            }
-                            .foregroundColor(.white)
-                            .padding(.vertical, 14)
-                            .padding(.horizontal, 20)
-                            .background(
-                                Capsule()
-                                    .fill(
-                                        LinearGradient(
-                                            colors: [.blue, .blue.opacity(0.8)],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                                    )
-                                    .shadow(color: .blue.opacity(0.4), radius: 10, x: 0, y: 5)
-                            )
-                        }
-                    }
-                                                                }
-                        .padding(.horizontal, 24)
-                        
-                        // Progress and Result Section
-                    VStack(spacing: 28) {
-                        
-                        // Enhanced Processed Image Preview
-                        if let processedImage = processedImage, !isProcessing {
-                            VStack(spacing: 16) {
-                                Text("✨ Transformation Complete!")
-                                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                                Text(selectedTheme.name)
+                                    .font(.system(size: 26, weight: .bold, design: .rounded))
                                     .foregroundStyle(
                                         LinearGradient(
-                                            colors: [.white, .white.opacity(0.9)],
+                                            colors: [.white, .white.opacity(0.8)],
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         )
                                     )
+                                    .onTapGesture {
+                                        startTestAnimation()
+                                    }
+                            }
+                            
+                            Text("Transform your photos with AI magic")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        .padding(.top, 16)
+                        .padding(.bottom, 32)
+                        
+                        // Enhanced Image Preview Card
+                        VStack(spacing: 20) {
+                            // Main image card
+                            ZStack {
+                                // Card background with multiple layers
+                                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                    .fill(.ultraThinMaterial)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                            .stroke(
+                                                LinearGradient(
+                                                    colors: [.white.opacity(0.2), .clear, selectedTheme.color.opacity(0.1)],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                ),
+                                                lineWidth: 1
+                                            )
+                                    )
+                                    .frame(height: 320)
+                                    .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
+                                    .shadow(color: selectedTheme.color.opacity(0.1), radius: 30, x: 0, y: 15)
+                                
+                                if let selectedImage = selectedImage {
+                                    Image(uiImage: selectedImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 280)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                } else {
+                                    VStack(spacing: 16) {
+                                        ZStack {
+                                            Circle()
+                                                .fill(
+                                                    LinearGradient(
+                                                        colors: [
+                                                            selectedTheme.color.opacity(0.2),
+                                                            selectedTheme.color.opacity(0.05)
+                                                        ],
+                                                        startPoint: .topLeading,
+                                                        endPoint: .bottomTrailing
+                                                    )
+                                                )
+                                                .frame(width: 80, height: 80)
+                                            
+                                            Image(systemName: "photo.badge.plus")
+                                                .font(.system(size: 36, weight: .light))
+                                                .foregroundStyle(
+                                                    LinearGradient(
+                                                        colors: [selectedTheme.color, selectedTheme.color.opacity(0.7)],
+                                                        startPoint: .topLeading,
+                                                        endPoint: .bottomTrailing
+                                                    )
+                                                )
+                                        }
+                                        
+                                        VStack(spacing: 6) {
+                                            Text("Choose Your Photo")
+                                                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                                .foregroundColor(.white)
+                                            
+                                            Text("Select an image to transform with AI")
+                                                .font(.system(size: 13, weight: .medium))
+                                                .foregroundColor(.white.opacity(0.5))
+                                                .multilineTextAlignment(.center)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        // Enhanced Action Buttons Section
+                        VStack(spacing: 16) {
+                            // Progress indicator
+                            if isProcessing {
+                                VStack(spacing: 12) {
+                                    ZStack {
+                                        Circle()
+                                            .stroke(selectedTheme.color.opacity(0.2), lineWidth: 4)
+                                            .frame(width: 60, height: 60)
+                                        
+                                        Circle()
+                                            .trim(from: 0, to: CGFloat(progressValue))
+                                            .stroke(
+                                                selectedTheme.color,
+                                                style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                                            )
+                                            .frame(width: 60, height: 60)
+                                            .rotationEffect(.degrees(-90))
+                                            .animation(.easeInOut(duration: 0.3), value: progressValue)
+                                        
+                                        Text("\(Int(progressValue * 100))%")
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundColor(.white)
+                                    }
+                                    
+                                    Text("Creating your transformation...")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white.opacity(0.7))
+                                }
+                                .padding(.vertical, 20)
+                            }
+                            
+                            // Action buttons
+                            HStack(spacing: 12) {
+                                // Choose Photo Button
+                                Button(action: { showingImagePicker = true }) {
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "plus.circle.fill")
+                                            .font(.system(size: 16, weight: .semibold))
+                                        Text("Choose")
+                                            .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                    }
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 16)
+                                    .padding(.horizontal, 20)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                            .fill(.ultraThinMaterial)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                    .stroke(selectedTheme.color.opacity(0.3), lineWidth: 1)
+                                            )
+                                    )
+                                    .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                                }
+                                
+                                if processedImage == nil {
+                                    if isProcessing {
+                                        // Cancel button
+                                        Button(action: { 
+                                            cancelProcessing = true
+                                            isProcessing = false
+                                            progressImage = nil
+                                            progressValue = 0
+                                            CartoonProcessingManager.shared.cancelActivity()
+                                        }) {
+                                            HStack(spacing: 8) {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .font(.system(size: 16, weight: .semibold))
+                                                Text("Cancel")
+                                                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                            }
+                                            .foregroundColor(.white)
+                                            .padding(.vertical, 16)
+                                            .padding(.horizontal, 24)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                    .fill(
+                                                        LinearGradient(
+                                                            colors: [.red.opacity(0.8), .red.opacity(0.6)],
+                                                            startPoint: .topLeading,
+                                                            endPoint: .bottomTrailing
+                                                        )
+                                                    )
+                                                    .overlay(
+                                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                            .stroke(.white.opacity(0.1), lineWidth: 1)
+                                                    )
+                                            )
+                                            .shadow(color: .red.opacity(0.3), radius: 8, x: 0, y: 4)
+                                        }
+                                    } else {
+                                        // Transform button
+                                        Button(action: { processImage() }) {
+                                            HStack(spacing: 8) {
+                                                Image(systemName: "wand.and.stars.inverse")
+                                                    .font(.system(size: 16, weight: .semibold))
+                                                Text("Transform")
+                                                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                            }
+                                            .foregroundColor(.white)
+                                            .padding(.vertical, 16)
+                                            .padding(.horizontal, 24)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                    .fill(
+                                                        selectedImage == nil ? 
+                                                            LinearGradient(
+                                                                colors: [.gray.opacity(0.3), .gray.opacity(0.2)],
+                                                                startPoint: .topLeading,
+                                                                endPoint: .bottomTrailing
+                                                            ) :
+                                                            LinearGradient(
+                                                                colors: [selectedTheme.color, selectedTheme.color.opacity(0.8)],
+                                                                startPoint: .topLeading,
+                                                                endPoint: .bottomTrailing
+                                                            )
+                                                    )
+                                                    .overlay(
+                                                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                            .stroke(.white.opacity(selectedImage == nil ? 0.05 : 0.1), lineWidth: 1)
+                                                    )
+                                            )
+                                            .shadow(color: selectedImage == nil ? .clear : selectedTheme.color.opacity(0.3), radius: 8, x: 0, y: 4)
+                                        }
+                                        .disabled(selectedImage == nil)
+                                    }
+                                } else {
+                                    // Share button
+                                    Button(action: { 
+                                        if let image = processedImage {
+                                            self.imageToShare = image
+                                            self.showingShareSheet = true
+                                        }
+                                    }) { 
+                                        HStack(spacing: 8) {
+                                            Image(systemName: "square.and.arrow.up.fill")
+                                                .font(.system(size: 16, weight: .semibold))
+                                            Text("Share")
+                                                .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                        }
+                                        .foregroundColor(.white)
+                                        .padding(.vertical, 16)
+                                        .padding(.horizontal, 24)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                .fill(
+                                                    LinearGradient(
+                                                        colors: [.blue, .blue.opacity(0.8)],
+                                                        startPoint: .topLeading,
+                                                        endPoint: .bottomTrailing
+                                                    )
+                                                )
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                        .stroke(.white.opacity(0.1), lineWidth: 1)
+                                                )
+                                        )
+                                        .shadow(color: .blue.opacity(0.3), radius: 8, x: 0, y: 4)
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 32)
+                        
+                        // Enhanced Processed Image Result
+                        if let processedImage = processedImage, !isProcessing {
+                            VStack(spacing: 20) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(selectedTheme.color)
+                                    
+                                    Text("Transformation Complete!")
+                                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                        .foregroundColor(.white)
+                                }
                                 
                                 ZStack {
-                                    RoundedRectangle(cornerRadius: 32, style: .continuous)
+                                    RoundedRectangle(cornerRadius: 24, style: .continuous)
                                         .fill(.ultraThinMaterial)
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 32, style: .continuous)
+                                            RoundedRectangle(cornerRadius: 24, style: .continuous)
                                                 .stroke(
                                                     LinearGradient(
-                                                        colors: [selectedTheme.color.opacity(0.4), .clear],
+                                                        colors: [selectedTheme.color.opacity(0.3), .clear],
                                                         startPoint: .topLeading,
                                                         endPoint: .bottomTrailing
                                                     ),
                                                     lineWidth: 2
                                                 )
                                         )
-                                        .frame(height: 300)
-                                        .shadow(color: .black.opacity(0.25), radius: 20, x: 0, y: 10)
-                                        .shadow(color: selectedTheme.color.opacity(0.4), radius: 30, x: 0, y: 15)
+                                        .frame(height: 320)
+                                        .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
+                                        .shadow(color: selectedTheme.color.opacity(0.2), radius: 30, x: 0, y: 15)
                                     
                                     Image(uiImage: processedImage)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 260)
-                                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                                        .frame(height: 280)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                                         .onTapGesture {
                                             withAnimation(.easeInOut(duration: 0.3)) {
                                                 self.isImageExpanded = true
                                             }
                                         }
                                     
-                                    // Tap to expand indicator
+                                    // Expand indicator
                                     VStack {
                                         Spacer()
                                         HStack {
                                             Spacer()
-                                            VStack(spacing: 4) {
-                                                Image(systemName: "arrow.up.left.and.arrow.down.right")
-                                                    .font(.system(size: 16, weight: .semibold))
-                                        
-                                            }
-                                            .foregroundColor(.white)
-                                            .padding(12)
-                                            .background(
-                                                Circle()
-                                                    .fill(.black.opacity(0.6))
-                                                    .background(.ultraThinMaterial, in: Circle())
-                                            )
-                                            .onTapGesture {
+                                            Button(action: {
                                                 withAnimation(.easeInOut(duration: 0.3)) {
                                                     self.isImageExpanded = true
+                                                }
+                                            }) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(.ultraThinMaterial)
+                                                        .frame(width: 40, height: 40)
+                                                    
+                                                    Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                                        .font(.system(size: 14, weight: .semibold))
+                                                        .foregroundColor(.white)
                                                 }
                                             }
                                             .padding(.trailing, 16)
@@ -388,59 +449,26 @@ struct ContentView: View {
                                 }
                                 .padding(.horizontal, 20)
                             }
+                            .padding(.top, 32)
                         }
                     }
-                    .padding(.top, 24)
                     
-                    // Processing Status Text (positioned at bottom, separate from buttons)
-//                    if isProcessing {
-//                        VStack(spacing: 12) {
-//                            Text("✨ Creating your transformation...")
-//                                .font(.system(size: 18, weight: .semibold, design: .rounded))
-//                                .foregroundStyle(
-//                                    LinearGradient(
-//                                        colors: [.white, .white.opacity(0.9)],
-//                                        startPoint: .topLeading,
-//                                        endPoint: .bottomTrailing
-//                                    )
-//                                )
-//                                .multilineTextAlignment(.center)
-//                            
-//                            Text("\(Int(progressValue * 100))% Complete")
-//                                .font(.system(size: 16, weight: .medium))
-//                                .foregroundStyle(
-//                                    LinearGradient(
-//                                        colors: [selectedTheme.color, selectedTheme.color.opacity(0.8)],
-//                                        startPoint: .leading,
-//                                        endPoint: .trailing
-//                                    )
-//                                )
-//                              
-//                        }
-//                        .padding(.horizontal, 30)
-//                        .padding(.vertical, 20)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-//                                .fill(.ultraThinMaterial)
-//                                .opacity(0.8)
-//                        )
-//                        .padding(.horizontal, 24)
-//                        .padding(.top, 40)
-//                    }
-                    
-                    // Bottom spacer for ScrollView
+                    // Bottom spacer
                     Spacer()
                         .frame(height: 100)
                 }
-                .padding(.bottom, 20)
-            }
-                
-                .sheet(isPresented: $showingImagePicker) {
-                    ImagePicker(image: $selectedImage)
+                .onChange(of: selectedImage) { _ in
+                    if processedImage != nil {
+                        processedImage = nil
+                        progressImage = nil
+                        progressValue = 0
+                    }
                 }
             }
         }
-      
+        .sheet(isPresented: $showingImagePicker) {
+            ImagePicker(image: $selectedImage)
+        }
         .sheet(isPresented: $showingShareSheet) {
             if let imageToShare = imageToShare {
                 ShareSheet(activityItems: [imageToShare])
@@ -456,8 +484,8 @@ struct ContentView: View {
                 Button("Test") {
                     startTestAnimation()
                 }
-                .foregroundColor(.white)
-                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+                .font(.system(size: 14, weight: .medium))
             }
         }
     }

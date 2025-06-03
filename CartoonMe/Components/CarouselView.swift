@@ -42,6 +42,7 @@ struct CarouselView: View {
                     }
                 }
             }
+         
             .padding(.horizontal)
             
             ScrollView(.horizontal, showsIndicators: false) {

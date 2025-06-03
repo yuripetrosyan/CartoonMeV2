@@ -25,120 +25,147 @@ struct ThemeSelectionView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Modern gradient background
+                // Enhanced multi-layer gradient background
                 LinearGradient(
-                    gradient: Gradient(colors: [
+                    colors: [
                         Color.black,
-                        Color.black.opacity(0.95),
-                        Color(red: 0.05, green: 0.05, blue: 0.1)
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
+                        Color(red: 0.02, green: 0.02, blue: 0.08),
+                        Color(red: 0.05, green: 0.03, blue: 0.12),
+                        Color(red: 0.08, green: 0.05, blue: 0.15),
+                        Color.black
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea(.all)
                 
+                // Dynamic ambient effects
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                .purple.opacity(0.15),
+                                .purple.opacity(0.05),
+                                .clear
+                            ],
+                            center: .center,
+                            startRadius: 50,
+                            endRadius: 200
+                        )
+                    )
+                    .frame(width: 400, height: 400)
+                    .offset(x: -100, y: -150)
+                    .blur(radius: 50)
+                
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                .blue.opacity(0.12),
+                                .cyan.opacity(0.06),
+                                .clear
+                            ],
+                            center: .center,
+                            startRadius: 30,
+                            endRadius: 150
+                        )
+                    )
+                    .frame(width: 300, height: 300)
+                    .offset(x: 150, y: 250)
+                    .blur(radius: 40)
+                
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                .pink.opacity(0.08),
+                                .clear
+                            ],
+                            center: .center,
+                            startRadius: 20,
+                            endRadius: 100
+                        )
+                    )
+                    .frame(width: 200, height: 200)
+                    .offset(x: -120, y: 180)
+                    .blur(radius: 35)
+                
                 ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 32) {
+                    LazyVStack(spacing: 40) {
                         // Hidden NavigationLink for programmatic navigation
                         NavigationLink(destination: AllThemesView(themes: themes, hideTabBar: $hideTabBar), isActive: $showAllThemes) { EmptyView() }
                         
-                        // Enhanced Header Section - Sleek and compact
-                        ZStack {
-                            // Layered gradient background effects
-                            VStack {
-                                // Primary gradient wave
-                                LinearGradient(
-                                    colors: [
-                                        .purple.opacity(0.8),
-                                        .blue.opacity(0.6),
-                                        .pink.opacity(0.4),
-                                        .clear
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                                .frame(height: 90)
-                                .blur(radius: 40)
-                                .offset(y: -60)
-                                
-                                // Secondary gradient layer
-                                LinearGradient(
-                                    colors: [
-                                        .cyan.opacity(0.4),
-                                        .purple.opacity(0.3),
-                                        .clear
-                                    ],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                                .frame(height: 70)
-                                .blur(radius: 35)
-                                .offset(y: -40)
-                                
-                             //   Spacer()
-                            }
-                           
-                            
-                            // Sleek text without container
-                            VStack(spacing: 16) {
-                                // Main title with enhanced styling
-                                VStack(spacing: 6) {
-                                    Text("Transform Your Style")
-                                        .font(.system(size: 32, weight: .heavy, design: .rounded))
-                                        .foregroundStyle(
-                                            LinearGradient(
-                                                colors: [
-                                                    .white,
-                                                    .white.opacity(0.95),
-                                                    .white.opacity(0.9)
-                                                ],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
-                                        )
-                                        .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
-                                        .shadow(color: .purple.opacity(0.3), radius: 16, x: 0, y: 8)
-                                    
-                                    // Sleek accent line
-                                    RoundedRectangle(cornerRadius: 2)
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [
-                                                    .purple.opacity(0.8),
-                                                    .blue.opacity(0.6),
-                                                    .pink.opacity(0.4)
-                                                ],
-                                                startPoint: .leading,
-                                                endPoint: .trailing
-                                            )
-                                        )
-                                        .frame(width: 70, height: 3)
-                                        .shadow(color: .purple.opacity(0.5), radius: 6, x: 0, y: 3)
-                                }
-                                
-                                // Subtitle with enhanced spacing
-                                Text("Choose from the collection of AI-powered cartoon styles")
-                                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                        // Enhanced Header Section
+                        VStack(spacing: 24) {
+                            // Main title with sophisticated styling
+                            VStack(spacing: 12) {
+                                Text("Transform Your Style")
+                                    .font(.system(size: 34, weight: .heavy, design: .rounded))
                                     .foregroundStyle(
                                         LinearGradient(
                                             colors: [
-                                                .white.opacity(0.9),
-                                                .white.opacity(0.7)
+                                                .white,
+                                                .white.opacity(0.95),
+                                                .white.opacity(0.85)
                                             ],
-                                            startPoint: .top,
-                                            endPoint: .bottom
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
                                         )
                                     )
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(2)
-                                    .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
+                                    .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
+                                    .shadow(color: .purple.opacity(0.3), radius: 20, x: 0, y: 8)
+                                
+                                // Enhanced accent line with gradient
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                .purple.opacity(0.9),
+                                                .blue.opacity(0.7),
+                                                .pink.opacity(0.5),
+                                                .cyan.opacity(0.3)
+                                            ],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                                    .frame(width: 80, height: 4)
+                                    .shadow(color: .purple.opacity(0.6), radius: 8, x: 0, y: 4)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 3)
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [.white.opacity(0.3), .clear],
+                                                    startPoint: .top,
+                                                    endPoint: .bottom
+                                                )
+                                            )
+                                            .frame(height: 2)
+                                            .offset(y: -1)
+                                    )
                             }
-                            .padding(.horizontal, 28)
+                            
+                            // Enhanced subtitle
+                            Text("Choose from our collection of AI-powered cartoon styles")
+                                .font(.system(size: 17, weight: .medium, design: .rounded))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [
+                                            .white.opacity(0.8),
+                                            .white.opacity(0.6)
+                                        ],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .multilineTextAlignment(.center)
+                                .lineLimit(2)
+                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                         }
-                        .padding(.top, 10)
-                        //.padding(.bottom, 15)
+                        .padding(.horizontal, 28)
+                        .padding(.top, 16)
                         
-                        // Main Themes Carousel with modern styling
+                        // Enhanced Main Themes Carousel
                         CarouselSection(
                             title: "✨ Most Popular",
                             subtitle: "Trending styles loved by creators",
@@ -148,19 +175,36 @@ struct ThemeSelectionView: View {
                             hideTabBar: $hideTabBar
                         )
                         
-                        // Featured Banner Carousel
-                        FeaturedBannerCarousel(
-                            featuredThemes: [
-                                Theme(name: "Disney", color: .orange, image: "DisneyImage", logo: "DisneyLogo"),
-                                Theme(name: "Studio Ghibli", color: .purple, image: "GhibliImage", logo: "")
-                            ],
-                            hideTabBar: $hideTabBar
-                        )
-                        .padding(.vertical, 8)
+                        // Enhanced Featured Banner Carousel
+                        VStack(spacing: 20) {
+                            // Section header
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("🎨 Featured Collections")
+                                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                    
+                                    Text("Premium styles with special features")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white.opacity(0.6))
+                                }
+                                Spacer()
+                            }
+                            .padding(.horizontal, 24)
+                            
+                            // Enhanced banner carousel
+                            FeaturedBannerCarousel(
+                                featuredThemes: [
+                                    Theme(name: "Disney", color: .orange, image: "DisneyImage", logo: "DisneyLogo"),
+                                    Theme(name: "Studio Ghibli", color: .purple, image: "GhibliImage", logo: "")
+                                ],
+                                hideTabBar: $hideTabBar
+                            )
+                        }
                         
-                        // New Styles Carousel
+                        // Enhanced New Styles Carousel
                         CarouselSection(
-                            title: "🎨 Fresh Arrivals",
+                            title: "🆕 Fresh Arrivals",
                             subtitle: "Latest AI art styles just added",
                             themes: Array(themes.reversed()),
                             showSeeAll: true,
@@ -168,104 +212,115 @@ struct ThemeSelectionView: View {
                             hideTabBar: $hideTabBar
                         )
                         
-                        // Browse All Section
-                        VStack(spacing: 16) {
+                        // Enhanced Browse All Section
+                        VStack(spacing: 20) {
                             HStack {
-                                Text("Explore All Styles")
-                                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Explore All Styles")
+                                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                    
+                                    Text("Discover every transformation available")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white.opacity(0.6))
+                                }
                                 Spacer()
                             }
                             .padding(.horizontal, 24)
                             
+                            // Enhanced browse all button
                             Button(action: { showAllThemes = true }) {
-                                HStack(spacing: 12) {
-                                    Image(systemName: "square.grid.2x2")
-                                        .font(.system(size: 18, weight: .semibold))
+                                HStack(spacing: 16) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [
+                                                        .purple.opacity(0.3),
+                                                        .blue.opacity(0.2)
+                                                    ],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                            .frame(width: 44, height: 44)
+                                        
+                                        Image(systemName: "square.grid.2x2")
+                                            .font(.system(size: 20, weight: .semibold))
+                                            .foregroundColor(.white)
+                                    }
                                     
-                                    Text("Browse All \(themes.count) Styles")
-                                        .font(.system(size: 16, weight: .semibold))
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Browse All \(themes.count) Styles")
+                                            .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                            .foregroundColor(.white)
+                                        
+                                        Text("View complete collection")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundColor(.white.opacity(0.7))
+                                    }
                                     
                                     Spacer()
                                     
                                     Image(systemName: "arrow.right")
-                                        .font(.system(size: 14, weight: .semibold))
+                                        .font(.system(size: 16, weight: .semibold))
+                                        .foregroundColor(.white.opacity(0.8))
                                 }
-                                .foregroundColor(.white)
                                 .padding(.horizontal, 24)
-                                .padding(.vertical, 18)
+                                .padding(.vertical, 20)
                                 .background(
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(.ultraThinMaterial)
-                                        
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .stroke(
-                                                LinearGradient(
-                                                    colors: [.white.opacity(0.3), .clear],
-                                                    startPoint: .topLeading,
-                                                    endPoint: .bottomTrailing
-                                                ),
-                                                lineWidth: 1
-                                            )
-                                    }
+                                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                        .fill(.ultraThinMaterial)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                                .stroke(
+                                                    LinearGradient(
+                                                        colors: [
+                                                            .white.opacity(0.2),
+                                                            .clear,
+                                                            .purple.opacity(0.1)
+                                                        ],
+                                                        startPoint: .topLeading,
+                                                        endPoint: .bottomTrailing
+                                                    ),
+                                                    lineWidth: 1
+                                                )
+                                        )
+                                        .shadow(color: .black.opacity(0.2), radius: 15, x: 0, y: 8)
+                                        .shadow(color: .purple.opacity(0.1), radius: 25, x: 0, y: 12)
                                 )
                             }
                             .padding(.horizontal, 24)
                         }
+                        
+                        // Bottom spacer
+                        Spacer()
+                            .frame(height: 60)
                     }
-                    .padding(.bottom, 120)
+                    .padding(.top, 12)
                 }
             }
-          //  .navigationTitle("CartoonMe")
-           // .navigationBarTitleDisplayMode(.inline)
-        //           .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    HStack(spacing: 16) {
-//                        Button(action: {}) {
-//                            Image(systemName: "magnifyingglass")
-//                                .font(.system(size: 18, weight: .medium))
-//                                .foregroundStyle(
-//                                    LinearGradient(
-//                                        colors: [.white, .white.opacity(0.8)],
-//                                        startPoint: .topLeading,
-//                                        endPoint: .bottomTrailing
-//                                    )
-//                                )
-//                        }
-//                        
-//                        Button(action: {}) {
-//                            Image(systemName: "person.circle")
-//                                .font(.system(size: 20, weight: .medium))
-//                                .foregroundStyle(
-//                                    LinearGradient(
-//                                        colors: [.white, .white.opacity(0.8)],
-//                                        startPoint: .topLeading,
-//                                        endPoint: .bottomTrailing
-//                                    )
-//                                )
-//                        }
-//                    }
-//                }
-//            }
+            .navigationBarHidden(true)
+        }
+        .onAppear {
+            hideTabBar = false
         }
     }
 }
 
-// carousel section wrapper
+// Enhanced CarouselSection with modern styling
 struct CarouselSection: View {
     let title: String
     let subtitle: String
     let themes: [Theme]
     let showSeeAll: Bool
-    let seeAllAction: (() -> Void)?
+    let seeAllAction: () -> Void
     @Binding var hideTabBar: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Modern header
-            HStack(alignment: .bottom) {
+        VStack(spacing: 20) {
+            // Enhanced section header
+            HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.system(size: 22, weight: .bold, design: .rounded))
@@ -273,42 +328,47 @@ struct CarouselSection: View {
                     
                     Text(subtitle)
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(.white.opacity(0.6))
                 }
                 
                 Spacer()
                 
                 if showSeeAll {
-                    Button(action: {
-                        seeAllAction?()
-                    }) {
-                        HStack(spacing: 4) {
+                    Button(action: seeAllAction) {
+                        HStack(spacing: 6) {
                             Text("See All")
-                                .font(.system(size: 14, weight: .semibold))
+                                .font(.system(size: 15, weight: .semibold))
                             Image(systemName: "arrow.right")
                                 .font(.system(size: 12, weight: .semibold))
                         }
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [.white.opacity(0.8), .white.opacity(0.6)],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
+                        .foregroundColor(.white.opacity(0.8))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(
+                            Capsule()
+                                .fill(.ultraThinMaterial)
+                                .overlay(
+                                    Capsule()
+                                        .stroke(.white.opacity(0.15), lineWidth: 1)
+                                )
                         )
+                        .shadow(color: .black.opacity(0.2), radius: 6, x: 0, y: 3)
                     }
                 }
             }
             .padding(.horizontal, 24)
             
-            // Enhanced carousel
+            // Enhanced theme cards carousel
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
-                    ForEach(themes) { theme in
+                    ForEach(themes, id: \.name) { theme in
                         NavigationLink(destination: ContentView(selectedTheme: theme)
                             .onAppear { hideTabBar = true }
-                            .onDisappear { hideTabBar = false }) {
-                            ThemeCard(theme: theme)
+                            .onDisappear { hideTabBar = false }
+                        ) {
+                            EnhancedThemeCard(theme: theme)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal, 24)
@@ -317,78 +377,86 @@ struct CarouselSection: View {
     }
 }
 
-// Clean Apple-style theme card with sophisticated progressive blur
-struct ThemeCard: View {
+// Enhanced Theme Card with sophisticated styling
+struct EnhancedThemeCard: View {
     let theme: Theme
-    @State private var isPressed = false
     
     var body: some View {
-        ZStack {
-            // Full cover image
-            Image(theme.image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 140, height: 195)
-                .clipped()
-            
-            // Apple-style progressive blur overlay at bottom
-            VStack {
-                Spacer()
+        VStack(spacing: 0) {
+            // Enhanced image container
+            ZStack {
+                // Multi-layer background
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        .white.opacity(0.2),
+                                        theme.color.opacity(0.1),
+                                        .clear
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1
+                            )
+                    )
+                    .frame(width: 160, height: 200)
+                    .shadow(color: .black.opacity(0.2), radius: 12, x: 0, y: 6)
+                    .shadow(color: theme.color.opacity(0.15), radius: 20, x: 0, y: 10)
                 
-                ZStack(alignment: .bottom) {
-                    // Multi-layer progressive blur effect (Apple's technique)
-                    ZStack {
-                        // Layer 1: Base material - enhanced blur
-                        Rectangle()
-                            .fill(.ultraThinMaterial)
-                            .mask(
-                                LinearGradient(
-                                    colors: [
-                                        .clear,
-                                        .black.opacity(0.10),
-                                        .black.opacity(0.6),
-                                        .black.opacity(0.90),
-                                        .black
-                                    ],
-                                    startPoint: .top,
-                                    endPoint: .bottom
+                // Theme image
+                Image(theme.image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 140, height: 180)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                
+                // Gradient overlay for text readability
+                LinearGradient(
+                    colors: [
+                        .clear,
+                        .clear,
+                        .black.opacity(0.3),
+                        .black.opacity(0.6)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(width: 140, height: 180)
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                
+                // Theme label
+                VStack {
+                    Spacer()
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(theme.name)
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                            
+                            // Theme color indicator
+                            Circle()
+                                .fill(theme.color)
+                                .frame(width: 8, height: 8)
+                                .overlay(
+                                    Circle()
+                                        .stroke(.white.opacity(0.3), lineWidth: 0.5)
                                 )
-                            )
-                        
-                        // Layer 2: Darker overlay for better readability - enhanced
-                        Rectangle()
-                            .fill(.black)
-                            .mask(
-                                LinearGradient(
-                                    colors: [
-                                        .clear,
-                                        .clear,
-                                        .black.opacity(0.3),
-                                        .black.opacity(0.6),
-                                        .black.opacity(0.8)
-                                    ],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                            )
+                        }
+                        Spacer()
                     }
-                    .frame(height: 68)
-                    
-                    // Theme title with enhanced readability
-                    Text(theme.name)
-                        .font(.system(size: 13, weight: .semibold, design: .rounded))
-                        .foregroundColor(.white)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 12)
-                        .padding(.bottom, 14)
-                        .shadow(color: .black.opacity(0.6), radius: 3, x: 0, y: 1)
-                        .shadow(color: .black.opacity(0.3), radius: 6, x: 0, y: 2)
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 12)
                 }
+                .frame(width: 140, height: 180)
             }
         }
-        .frame(width: 140, height: 195)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .scaleEffect(1.0)
+        .animation(.easeInOut(duration: 0.2), value: theme.name)
     }
 }
 
