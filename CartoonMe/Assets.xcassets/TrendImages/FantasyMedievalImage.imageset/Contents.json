@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "FantasyMedievalImage.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "FantasyMedievalImage@2x.png", 
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "FantasyMedievalImage@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+} 

@@ -6,8 +6,8 @@ struct MainTabBarView: View {
         
         var title: String {
             switch self {
-            case .explore: return "Explore"
-            case .account: return "Account"
+            case .explore: return "Cartoon"
+            case .account: return "Trends"
             case .aiVideo: return "Video"
             case .aiHeadshots: return "Headshot"
             }
@@ -56,7 +56,7 @@ struct MainTabBarView: View {
                         ThemeSelectionView(hideTabBar: $hideTabBar)
                     }
                 case .account:
-                    AccountPlaceholderView()
+                    TrendsView()
                 case .aiVideo:
                     AIVideoPlaceholderView()
                 case .aiHeadshots:
@@ -110,11 +110,13 @@ struct ModernTabBar: View {
             // Advanced Glassmorphism Background
             ZStack {
                 // Base material
-                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
                     .fill(.ultraThinMaterial)
+                 
+                  
                 
                 // Gradient overlay for depth
-                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                RoundedRectangle(cornerRadius: 50, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [
@@ -128,7 +130,7 @@ struct ModernTabBar: View {
                     )
                 
                 // Subtle border
-                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                RoundedRectangle(cornerRadius: 50, style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [
@@ -213,7 +215,7 @@ struct ModernTabBarItem: View {
                 // Selection indicator background - sized to content
                 Group {
                     if isSelected {
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
                             .fill(
                                 LinearGradient(
                                     colors: [
@@ -225,7 +227,7 @@ struct ModernTabBarItem: View {
                                 )
                             )
                             .overlay(
-                                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                RoundedRectangle(cornerRadius:35, style: .continuous)
                                     .stroke(tab.accentColor.opacity(0.4), lineWidth: 1)
                             )
                             .shadow(

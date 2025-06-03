@@ -286,8 +286,8 @@ struct ThemeSelectionView: View {
                                                     lineWidth: 1
                                                 )
                                         )
-                                        .shadow(color: .black.opacity(0.2), radius: 15, x: 0, y: 8)
-                                        .shadow(color: .purple.opacity(0.1), radius: 25, x: 0, y: 12)
+                                        .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
+                                        .shadow(color: .purple.opacity(0.03), radius: 15, x: 0, y: 6)
                                 )
                             }
                             .padding(.horizontal, 24)
@@ -352,7 +352,7 @@ struct CarouselSection: View {
                                         .stroke(.white.opacity(0.15), lineWidth: 1)
                                 )
                         )
-                        .shadow(color: .black.opacity(0.2), radius: 6, x: 0, y: 3)
+                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
                     }
                 }
             }
@@ -404,8 +404,8 @@ struct EnhancedThemeCard: View {
                             )
                     )
                     .frame(width: 160, height: 200)
-                    .shadow(color: .black.opacity(0.2), radius: 12, x: 0, y: 6)
-                    .shadow(color: theme.color.opacity(0.15), radius: 20, x: 0, y: 10)
+                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                    .shadow(color: theme.color.opacity(0.05), radius: 12, x: 0, y: 6)
                 
                 // Theme image
                 Image(theme.image)

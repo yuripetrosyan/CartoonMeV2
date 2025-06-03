@@ -11,6 +11,7 @@ import PhotosUI
 
 struct ContentView: View {
     let selectedTheme: Theme
+    let selectedTrend: Trend?
     @State private var selectedImage: UIImage?
     @State private var processedImage: UIImage?
     @State private var progressImage: UIImage?
@@ -27,6 +28,24 @@ struct ContentView: View {
     @State private var imageToShare: UIImage? = nil
     @State private var cancelProcessing: Bool = false
     @State private var testMode: Bool = false
+    
+    // Convenience initializer for theme-only navigation
+    init(selectedTheme: Theme) {
+        self.selectedTheme = selectedTheme
+        self.selectedTrend = nil
+    }
+    
+    // Initializer for trend navigation
+    init(selectedTrend: Trend) {
+        // Create a temporary theme from trend data
+        self.selectedTheme = Theme(
+            name: selectedTrend.name,
+            color: selectedTrend.color,
+            image: "",
+            logo: nil
+        )
+        self.selectedTrend = selectedTrend
+    }
     
     var body: some View {
         ZStack {
@@ -116,7 +135,34 @@ struct ContentView: View {
                         // Title Section with enhanced styling
                         VStack(spacing: 8) {
                             HStack(spacing: 12) {
-                                if let logo = selectedTheme.logo, !logo.isEmpty {
+                                if let selectedTrend = selectedTrend {
+                                    // Show trend icon when from trends
+                                    ZStack {
+                                        Circle()
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [
+                                                        selectedTrend.color.opacity(0.3),
+                                                        selectedTrend.color.opacity(0.1)
+                                                    ],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                            .frame(width: 32, height: 32)
+                                        
+                                        Image(systemName: selectedTrend.icon)
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundStyle(
+                                                LinearGradient(
+                                                    colors: [selectedTrend.color, selectedTrend.color.opacity(0.8)],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                    }
+                                } else if let logo = selectedTheme.logo, !logo.isEmpty {
+                                    // Show theme logo when from themes
                                     Image(logo)
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
@@ -136,9 +182,11 @@ struct ContentView: View {
                                     }
                             }
                             
-                            Text("Transform your photos with AI magic")
+                            Text(selectedTrend?.description ?? "Transform your photos with AI magic")
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(.white.opacity(0.6))
+                                .multilineTextAlignment(.center)
+                                .lineLimit(2)
                         }
                         .padding(.top, 16)
                         .padding(.bottom, 32)
@@ -499,36 +547,75 @@ struct ContentView: View {
         // Start the live activity for Dynamic Island
         CartoonProcessingManager.shared.startActivity(themeName: selectedTheme.name)
         
-        imageProcessor.cartoonify(
-            image: image,
-            theme: selectedTheme.name,
-            progressCallback: { (updatedImage, progress) in
-                // Only update if not cancelled
-                if !cancelProcessing {
-                    self.progressImage = updatedImage
-                    self.progressValue = progress
-                    
-                    // Update Dynamic Island activity progress
-                    CartoonProcessingManager.shared.updateProgress(Double(progress))
+        // Choose processing method based on whether we have a trend or theme
+        if let trend = selectedTrend {
+            // Use trend-specific transformation
+            imageProcessor.transformWithTrend(
+                image: image,
+                trend: trend,
+                progressCallback: { (updatedImage, progress) in
+                    // Only update if not cancelled
+                    if !cancelProcessing {
+                        self.progressImage = updatedImage
+                        self.progressValue = progress
+                        
+                        // Update Dynamic Island activity progress
+                        CartoonProcessingManager.shared.updateProgress(Double(progress))
+                    }
+                }
+            ) { result in
+                DispatchQueue.main.async {
+                    // Only update if not cancelled
+                    if !self.cancelProcessing {
+                        if let result = result {
+                            self.processedImage = result
+                            
+                            // Complete the Dynamic Island activity
+                            CartoonProcessingManager.shared.completeActivity()
+                        } else {
+                            self.errorMessage = "Failed to process the image. Please try again."
+                            self.showError = true
+                            
+                            // Cancel the Dynamic Island activity
+                            CartoonProcessingManager.shared.cancelActivity()
+                        }
+                        self.isProcessing = false
+                    }
                 }
             }
-        ) { result in
-            DispatchQueue.main.async {
-                // Only update if not cancelled
-                if !self.cancelProcessing {
-                    if let result = result {
-                        self.processedImage = result
+        } else {
+            // Use traditional cartoon transformation
+            imageProcessor.cartoonify(
+                image: image,
+                theme: selectedTheme.name,
+                progressCallback: { (updatedImage, progress) in
+                    // Only update if not cancelled
+                    if !cancelProcessing {
+                        self.progressImage = updatedImage
+                        self.progressValue = progress
                         
-                        // Complete the Dynamic Island activity
-                        CartoonProcessingManager.shared.completeActivity()
-                    } else {
-                        self.errorMessage = "Failed to process the image. Please try again."
-                        self.showError = true
-                        
-                        // Cancel the Dynamic Island activity
-                        CartoonProcessingManager.shared.cancelActivity()
+                        // Update Dynamic Island activity progress
+                        CartoonProcessingManager.shared.updateProgress(Double(progress))
                     }
-                    self.isProcessing = false
+                }
+            ) { result in
+                DispatchQueue.main.async {
+                    // Only update if not cancelled
+                    if !self.cancelProcessing {
+                        if let result = result {
+                            self.processedImage = result
+                            
+                            // Complete the Dynamic Island activity
+                            CartoonProcessingManager.shared.completeActivity()
+                        } else {
+                            self.errorMessage = "Failed to process the image. Please try again."
+                            self.showError = true
+                            
+                            // Cancel the Dynamic Island activity
+                            CartoonProcessingManager.shared.cancelActivity()
+                        }
+                        self.isProcessing = false
+                    }
                 }
             }
         }
