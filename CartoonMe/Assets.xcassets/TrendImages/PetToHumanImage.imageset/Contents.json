@@ -2,22 +2,11 @@
   "images" : [
     {
       "filename" : "PetToHumanImage.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "PetToHumanImage@2x.png", 
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "PetToHumanImage@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
   }
-} 
+}

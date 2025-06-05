@@ -2,22 +2,11 @@
   "images" : [
     {
       "filename" : "TimBurtonGothicImage.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "TimBurtonGothicImage@2x.png", 
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "TimBurtonGothicImage@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
   }
-} 
+}
