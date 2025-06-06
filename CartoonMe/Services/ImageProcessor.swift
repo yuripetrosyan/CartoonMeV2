@@ -656,6 +656,113 @@ class ImageProcessor {
         return uiImg
     }
     
+    /// Generate professional headshots using OpenAI API
+    func generateHeadshot(image: UIImage,
+                         style: String,
+                         progressCallback: @escaping (UIImage, Float) -> Void = { _, _ in },
+                         completion: @escaping (UIImage?) -> Void) {
+        
+        Task {
+            do {
+                // Step 0 – hygiene and prepare image
+                let base = try image
+                    .fixedOrientation()
+                    .resizedToFit(maxPixelCount: 4_000_000)
+                    ?? image // fallback
+
+                // Step 1 – create progress simulation
+                let progressStreamer = HeadshotProgressStreamer(original: base)
+                progressStreamer.start { img, f in progressCallback(img, f) }
+
+                // Step 2 – generate professional headshot
+                let headshotImage = try await self.generateProfessionalHeadshot(prompt: style, referenceImage: base)
+                progressStreamer.finish(with: headshotImage) { img in progressCallback(img, 1) }
+
+                DispatchQueue.main.async {
+                    completion(headshotImage)
+                }
+            } catch {
+                print("❌ Headshot generation failed: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+        }
+    }
+    
+    /// Generate professional headshot using OpenAI API
+    private func generateProfessionalHeadshot(prompt: String, referenceImage: UIImage) async throws -> UIImage {
+        let openAIKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] ?? ""
+        
+        // Calculate optimal dimensions maintaining aspect ratio
+        let targetSize = self.calculateOptimalSize(for: referenceImage.size)
+        let editURL = URL(string: "https://api.openai.com/v1/images/edits")!
+        
+        // Prepare the image data
+        guard let imageData = referenceImage.jpegData(compressionQuality: 0.85) else {
+            throw NSError(domain: "ImageProcessor", code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not convert image to JPEG"])
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var body = Data()
+        
+        // Add model
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"model\"\r\n\r\n".data(using: .utf8)!)
+        body.append("gpt-image-1\r\n".data(using: .utf8)!)
+        
+        // Add prompt - enhanced for headshot generation
+        let enhancedPrompt = "Transform this photo into a \(prompt). Maintain realistic human features and proportions. Focus on professional lighting, sharp details, and high image quality. Avoid cartoon, anime, or stylized artistic effects."
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"prompt\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\(enhancedPrompt)\r\n".data(using: .utf8)!)
+        
+        // Add image
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        
+        // Add size
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"size\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\(Int(targetSize.width))x\(Int(targetSize.height))\r\n".data(using: .utf8)!)
+        
+        // Add quality - use 'hd' for headshots to get better quality
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"quality\"\r\n\r\n".data(using: .utf8)!)
+        body.append("medium\r\n".data(using: .utf8)!)
+        
+        // End boundary
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        // Create request
+        var request = URLRequest(url: editURL)
+        request.httpMethod = "POST"
+        request.httpBody = body
+        request.setValue("Bearer \(openAIKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+            let errorMsg = String(data: data, encoding: .utf8) ?? "<binary>"
+            throw NSError(domain: "ImageProcessor", code: -2, userInfo: [NSLocalizedDescriptionKey: errorMsg])
+        }
+        
+        guard
+            let root = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let responseData = (root["data"] as? [[String: Any]])?.first,
+            let b64 = responseData["b64_json"] as? String,
+            let imgData = Data(base64Encoded: b64),
+            let uiImg = UIImage(data: imgData)
+        else {
+            throw NSError(domain: "ImageProcessor", code: -1, userInfo: [NSLocalizedDescriptionKey: "Bad JSON response"])
+        }
+        
+        return uiImg
+    }
+    
     /// Calculate optimal output dimensions from supported API sizes
     private func calculateOptimalSize(for originalSize: CGSize) -> CGSize {
         // API only supports these specific sizes
@@ -683,6 +790,65 @@ class ImageProcessor {
         }
         
         return bestSize
+    }
+}
+
+// MARK: – Headshot Progress stream ----------------------------------------------------
+private final class HeadshotProgressStreamer {
+    private let original: UIImage
+    private var timer: DispatchSourceTimer?
+
+    init(original: UIImage) {
+        self.original = original
+    }
+
+    func start(update: @escaping (UIImage, Float) -> Void) {
+        var step: Float = 0
+        timer = DispatchSource.makeTimerSource()
+        timer?.schedule(deadline: .now(), repeating: 0.3)
+        timer?.setEventHandler { [weak self] in
+            guard let self else { return }
+            step += 0.08
+            if step >= 0.95 { step = 0.95 }
+            let preview = self.enhanceForHeadshot(intensity: step)
+            DispatchQueue.main.async { update(preview, step) }
+        }
+        timer?.resume()
+    }
+
+    func finish(with final: UIImage, completion: (UIImage) -> Void ) {
+        timer?.cancel()
+        completion(final)
+    }
+
+    /// Professional enhancement effects for headshot progress illusion
+    private func enhanceForHeadshot(intensity: Float) -> UIImage {
+        guard let cgImage = original.cgImage else { return original }
+        
+        let ciImage = CIImage(cgImage: cgImage)
+        let context = CIContext()
+        
+        // Apply subtle professional enhancement effects
+        let adjustedIntensity = min(1.0, max(0.0, intensity))
+        
+        // Color balance and lighting enhancement
+        let colorFilter = CIFilter.colorControls()
+        colorFilter.inputImage = ciImage
+        colorFilter.saturation = 1.0 + (adjustedIntensity * 0.1)
+        colorFilter.brightness = adjustedIntensity * 0.05
+        colorFilter.contrast = 1.0 + (adjustedIntensity * 0.1)
+        
+        guard let colorOutput = colorFilter.outputImage else { return original }
+        
+        // Subtle sharpening for professional look
+        let sharpenFilter = CIFilter.sharpenLuminance()
+        sharpenFilter.inputImage = colorOutput
+        sharpenFilter.sharpness = adjustedIntensity * 0.3
+        
+        guard let finalOutput = sharpenFilter.outputImage,
+              let finalCGImage = context.createCGImage(finalOutput, from: finalOutput.extent) else { return original }
+        
+        return UIImage(cgImage: finalCGImage)
     }
 }
 

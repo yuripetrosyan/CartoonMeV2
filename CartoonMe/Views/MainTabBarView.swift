@@ -8,8 +8,9 @@ struct MainTabBarView: View {
             switch self {
             case .explore: return "Cartoon"
             case .account: return "Trends"
-            case .aiVideo: return "Video"
             case .aiHeadshots: return "Headshot"
+            case .aiVideo: return "Video"
+           
             }
         }
         
@@ -35,8 +36,9 @@ struct MainTabBarView: View {
             switch self {
             case .explore: return .purple
             case .account: return .blue
-            case .aiVideo: return .pink
             case .aiHeadshots: return .orange
+            case .aiVideo: return .pink
+           
             }
         }
     }
@@ -56,11 +58,13 @@ struct MainTabBarView: View {
                         ThemeSelectionView(hideTabBar: $hideTabBar)
                     }
                 case .account:
-                    TrendsView()
+                    NavigationStack {
+                        TrendsView(hideTabBar: $hideTabBar)
+                    }
                 case .aiVideo:
                     AIVideoPlaceholderView()
                 case .aiHeadshots:
-                    AIHeadshotsPlaceholderView()
+                    HeadshotView(hideTabBar: $hideTabBar)
                 }
             }
             .edgesIgnoringSafeArea(.all)
@@ -248,127 +252,27 @@ struct ModernTabBarItem: View {
             onPressChange(pressing)
         } perform: {}
         .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: isSelected)
+        .accessibilityLabel(tab.title)
     }
 }
 
-// Placeholder Views with modern styling
-struct AccountPlaceholderView: View {
-    var body: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.black,
-                    Color.black.opacity(0.95),
-                    Color(red: 0.05, green: 0.05, blue: 0.1)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea(.all)
-            
-            VStack(spacing: 20) {
-                Image(systemName: "person.circle.fill")
-                    .font(.system(size: 80))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.blue, .blue.opacity(0.7)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                
-                VStack(spacing: 8) {
-                    Text("Account")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Text("Manage your profile and settings")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white.opacity(0.7))
-                        .multilineTextAlignment(.center)
-                }
-            }
-        }
-    }
-}
-
+// Dummy placeholder views for illustration
 struct AIVideoPlaceholderView: View {
     var body: some View {
         ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.black,
-                    Color.black.opacity(0.95),
-                    Color(red: 0.05, green: 0.05, blue: 0.1)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea(.all)
-            
-            VStack(spacing: 20) {
-                Image(systemName: "video.fill")
-                    .font(.system(size: 80))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.pink, .pink.opacity(0.7)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                
-                VStack(spacing: 8) {
-                    Text("AI Video")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Text("Create amazing AI-powered videos")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white.opacity(0.7))
-                        .multilineTextAlignment(.center)
-                }
-            }
+            Color.black.ignoresSafeArea()
+            Text("AI Video Coming Soon")
+                .font(.largeTitle)
+                .bold()
+                .foregroundColor(.white)
         }
     }
 }
 
-struct AIHeadshotsPlaceholderView: View {
-    var body: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.black,
-                    Color.black.opacity(0.95),
-                    Color(red: 0.05, green: 0.05, blue: 0.1)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea(.all)
-            
-            VStack(spacing: 20) {
-                Image(systemName: "person.crop.square.filled.and.at.rectangle.fill")
-                    .font(.system(size: 80))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.orange, .orange.opacity(0.7)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                
-                VStack(spacing: 8) {
-                    Text("Headshots")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Text("Generate professional AI headshots")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white.opacity(0.7))
-                        .multilineTextAlignment(.center)
-                }
-            }
-        }
+struct MainTabBarView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainTabBarView()
+            .preferredColorScheme(.dark)
     }
 }
 

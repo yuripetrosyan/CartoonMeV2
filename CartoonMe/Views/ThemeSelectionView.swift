@@ -146,28 +146,27 @@ struct ThemeSelectionView: View {
                             }
                             
                             // Enhanced subtitle
-                            Text("Choose from our collection of AI-powered cartoon styles")
-                                .font(.system(size: 17, weight: .medium, design: .rounded))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [
-                                            .white.opacity(0.8),
-                                            .white.opacity(0.6)
-                                        ],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .multilineTextAlignment(.center)
-                                .lineLimit(2)
-                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+//                            Text("Choose from the collection of AI-powered cartoon styles")
+//                                .font(.system(size: 17, weight: .medium, design: .rounded))
+//                                .foregroundStyle(
+//                                    LinearGradient(
+//                                        colors: [
+//                                            .white.opacity(0.8),
+//                                            .white.opacity(0.6)
+//                                        ],
+//                                        startPoint: .top,
+//                                        endPoint: .bottom
+//                                    )
+//                                )
+//                                .multilineTextAlignment(.center)
+//                                .lineLimit(2)
+//                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                         }
                         .padding(.horizontal, 28)
-                        .padding(.top, 16)
-                        
+                 
                         // Enhanced Main Themes Carousel
                         CarouselSection(
-                            title: "✨ Most Popular",
+                            title: "Most Popular",
                             subtitle: "Trending styles loved by creators",
                             themes: themes,
                             showSeeAll: true,
@@ -180,7 +179,7 @@ struct ThemeSelectionView: View {
                             // Section header
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("🎨 Featured Collections")
+                                    Text("Featured Collections")
                                         .font(.system(size: 22, weight: .bold, design: .rounded))
                                         .foregroundColor(.white)
                                     
@@ -204,7 +203,7 @@ struct ThemeSelectionView: View {
                         
                         // Enhanced New Styles Carousel
                         CarouselSection(
-                            title: "🆕 Fresh Arrivals",
+                            title: "Fresh Arrivals",
                             subtitle: "Latest AI art styles just added",
                             themes: Array(themes.reversed()),
                             showSeeAll: true,
@@ -385,33 +384,18 @@ struct EnhancedThemeCard: View {
         VStack(spacing: 0) {
             // Enhanced image container
             ZStack {
-                // Multi-layer background
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .stroke(
-                                LinearGradient(
-                                    colors: [
-                                        .white.opacity(0.2),
-                                        theme.color.opacity(0.1),
-                                        .clear
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 1
-                            )
-                    )
-                    .frame(width: 160, height: 200)
-                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-                    .shadow(color: theme.color.opacity(0.05), radius: 12, x: 0, y: 6)
+//                // Multi-layer background
+//                RoundedRectangle(cornerRadius: 20, style: .continuous)
+//                    .fill(.ultraThinMaterial)
+//                    .frame(width: 160, height: 200)
+//                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+//                    .shadow(color: theme.color.opacity(0.05), radius: 12, x: 0, y: 6)
                 
                 // Theme image
                 Image(theme.image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 140, height: 180)
+                    .frame(width: 150, height: 200)
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 
                 // Gradient overlay for text readability
@@ -419,13 +403,13 @@ struct EnhancedThemeCard: View {
                     colors: [
                         .clear,
                         .clear,
-                        .black.opacity(0.3),
-                        .black.opacity(0.6)
+                        .black.opacity(0.1),
+                        .black.opacity(0.5)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .frame(width: 140, height: 180)
+                .frame(width: 150, height: 200)
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 
                 // Theme label
@@ -437,20 +421,11 @@ struct EnhancedThemeCard: View {
                                 .font(.system(size: 14, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
                                 .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
-                            
-                            // Theme color indicator
-                            Circle()
-                                .fill(theme.color)
-                                .frame(width: 8, height: 8)
-                                .overlay(
-                                    Circle()
-                                        .stroke(.white.opacity(0.3), lineWidth: 0.5)
-                                )
                         }
-                        Spacer()
+                      //  Spacer()
                     }
                     .padding(.horizontal, 12)
-                    .padding(.bottom, 12)
+                    .padding(.bottom, 5)
                 }
                 .frame(width: 140, height: 180)
             }

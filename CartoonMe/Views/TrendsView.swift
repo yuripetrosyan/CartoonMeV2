@@ -2,8 +2,8 @@ import SwiftUI
 import Foundation
 
 struct TrendsView: View {
+    @Binding var hideTabBar: Bool
     @State private var selectedCategory: TrendCategory? = nil
-    @State private var showAllTrends = false
     private let trendsData = TrendsData.shared
     
     var body: some View {
@@ -37,7 +37,7 @@ struct TrendsView: View {
                             endRadius: 200
                         )
                     )
-                    .frame(width: 400, height: 400)
+                .frame(width: 400, height: 400)
                     .offset(x: -100, y: -150)
                     .blur(radius: 50)
                 
@@ -59,117 +59,187 @@ struct TrendsView: View {
                     .blur(radius: 40)
                 
                 ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 40) {
-                        // Enhanced Header Section
-                        VStack(spacing: 24) {
-                            // Main title with sophisticated styling
-                            VStack(spacing: 12) {
-                                Text("AI Trends")
-                                    .font(.system(size: 34, weight: .heavy, design: .rounded))
+                    VStack(spacing: 32) {
+                        // Enhanced Header
+                        VStack(spacing: 16) {
+                            Text("AI Trends")
+                                .font(.system(size: 28, weight: .bold, design: .rounded))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [
+                                            .white,
+                                            .white.opacity(0.95),
+                                            .white.opacity(0.85)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
+                                .shadow(color: .blue.opacity(0.3), radius: 20, x: 0, y: 8)
+                            
+                            RoundedRectangle(cornerRadius: 3)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            .purple.opacity(0.9),
+                                            .blue.opacity(0.7),
+                                            .pink.opacity(0.5),
+                                            .cyan.opacity(0.3)
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .frame(width: 80, height: 4)
+                                .shadow(color: .purple.opacity(0.6), radius: 8, x: 0, y: 4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [.white.opacity(0.3), .clear],
+                                                startPoint: .top,
+                                                endPoint: .bottom
+                                            )
+                                        )
+                                        .frame(height: 2)
+                                        .offset(y: -1)
+                                )
+                        
+                            
+//                            Text("Transform your photos with trending AI styles")
+//                                .font(.system(size: 16, weight: .medium))
+//                                .foregroundColor(.white.opacity(0.7))
+//                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 16)
+                        
+                        // Hero Section - Featured/Most Popular Trends
+                        if selectedCategory == nil {
+                            VStack(spacing: 20) {
+                                HStack {
+                                    Text("🔥 Most Popular")
+                                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                                        .foregroundStyle(
+                                            LinearGradient(
+                                                colors: [.white, .white.opacity(0.9)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 24)
+                                
+                                // Grid layout for better use of space
+                                LazyVGrid(columns: [
+                                    GridItem(.flexible(minimum: 150), spacing: 12),
+                                    GridItem(.flexible(minimum: 150), spacing: 12)
+                                ], spacing: 16) {
+                                    ForEach(trendsData.trendingNow, id: \.name) { trend in
+                                        SimpleTrendCard(trend: trend, hideTabBar: $hideTabBar)
+                                    }
+                                }
+                                .padding(.horizontal, 24)
+                            }
+                        }
+                        
+                        // Category Selection
+                        VStack(spacing: 20) {
+                            HStack {
+                                Text(selectedCategory == nil ? "Browse by Style" : "Categories")
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
                                     .foregroundStyle(
                                         LinearGradient(
-                                            colors: [
-                                                .white,
-                                                .white.opacity(0.95),
-                                                .white.opacity(0.85)
-                                            ],
+                                            colors: [.white, .white.opacity(0.9)],
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         )
                                     )
-                                    .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
-                                    .shadow(color: .blue.opacity(0.3), radius: 20, x: 0, y: 8)
+                                    .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+                                Spacer()
                                 
-                                // Enhanced accent line with gradient
-                                RoundedRectangle(cornerRadius: 3)
-                                    .fill(
+                                if selectedCategory != nil {
+                                    Button("Show All") {
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            selectedCategory = nil
+                                        }
+                                    }
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundStyle(
                                         LinearGradient(
-                                            colors: [
-                                                .blue.opacity(0.9),
-                                                .purple.opacity(0.7),
-                                                .pink.opacity(0.5),
-                                                .cyan.opacity(0.3)
-                                            ],
+                                            colors: [.blue, .cyan],
                                             startPoint: .leading,
                                             endPoint: .trailing
                                         )
                                     )
-                                    .frame(width: 80, height: 4)
-                                    .shadow(color: .blue.opacity(0.6), radius: 8, x: 0, y: 4)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 3)
-                                            .fill(
-                                                LinearGradient(
-                                                    colors: [.white.opacity(0.3), .clear],
-                                                    startPoint: .top,
-                                                    endPoint: .bottom
-                                                )
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(
+                                        Capsule()
+                                            .fill(.ultraThinMaterial)
+                                            .overlay(
+                                                Capsule()
+                                                    .stroke(.white.opacity(0.15), lineWidth: 1)
                                             )
-                                            .frame(height: 2)
-                                            .offset(y: -1)
                                     )
-                            }
-                            
-                            // Enhanced subtitle
-                            Text("Discover the latest viral AI image trends from social media")
-                                .font(.system(size: 17, weight: .medium, design: .rounded))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [
-                                            .white.opacity(0.8),
-                                            .white.opacity(0.6)
-                                        ],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .multilineTextAlignment(.center)
-                                .lineLimit(2)
-                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
-                        .padding(.horizontal, 28)
-                        .padding(.top, 16)
-                        
-                        // Viral Trends Section
-                        TrendCarouselSection(
-                            title: "🔥 Viral Now",
-                            subtitle: "Most popular AI trends taking over social media",
-                            trends: trendsData.trendingNow,
-                            showSeeAll: true,
-                            seeAllAction: { showAllTrends = true }
-                        )
-                        
-                        // Category Filter Pills
-                        CategoryFilterSection(selectedCategory: $selectedCategory)
-                        
-                        // Category-based sections
-                        if let selectedCategory = selectedCategory {
-                            TrendCarouselSection(
-                                title: "\(selectedCategory.emoji) \(selectedCategory.rawValue)",
-                                subtitle: "Trending \(selectedCategory.rawValue.lowercased()) AI styles",
-                                trends: trendsData.trends(for: selectedCategory),
-                                showSeeAll: false,
-                                seeAllAction: {}
-                            )
-                        } else {
-                            // Show all categories when none selected
-                            ForEach(TrendCategory.allCases, id: \.self) { category in
-                                let categoryTrends = trendsData.trends(for: category)
-                                if !categoryTrends.isEmpty {
-                                    TrendCarouselSection(
-                                        title: "\(category.emoji) \(category.rawValue)",
-                                        subtitle: "Popular \(category.rawValue.lowercased()) transformations",
-                                        trends: Array(categoryTrends.prefix(4)),
-                                        showSeeAll: categoryTrends.count > 4,
-                                        seeAllAction: { selectedCategory = category }
-                                    )
+                                    .shadow(color: .blue.opacity(0.3), radius: 4, x: 0, y: 2)
                                 }
+                            }
+                            .padding(.horizontal, 24)
+                            
+                            // Category pills  
+                            VStack(spacing: 8) {
+                                ForEach(TrendCategory.allCases, id: \.self) { category in
+                                    CategoryCard(
+                                        category: category,
+                                        isSelected: selectedCategory == category,
+                                        trendsCount: trendsData.trends(for: category).count
+                                    ) {
+                                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                            selectedCategory = selectedCategory == category ? nil : category
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(.horizontal, 24)
+                        }
+                        
+                        // Selected Category Content
+                        if let selectedCategory = selectedCategory {
+                            VStack(spacing: 20) {
+                                HStack {
+                                    Text("\(selectedCategory.emoji) \(selectedCategory.rawValue) Styles")
+                                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                                        .foregroundStyle(
+                                            LinearGradient(
+                                                colors: [.white, .white.opacity(0.9)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 24)
+                                
+                                LazyVGrid(columns: [
+                                    GridItem(.flexible(minimum: 150), spacing: 12),
+                                    GridItem(.flexible(minimum: 150), spacing: 12)
+                                ], spacing: 16) {
+                                    ForEach(trendsData.trends(for: selectedCategory), id: \.name) { trend in
+                                        SimpleTrendCard(trend: trend, hideTabBar: $hideTabBar)
+                                    }
+                                }
+                                .padding(.horizontal, 24)
                             }
                         }
                         
                         // Bottom spacer
                         Spacer()
-                            .frame(height: 60)
+                            .frame(height: 40)
                     }
                     .padding(.top, 12)
                 }
@@ -179,183 +249,101 @@ struct TrendsView: View {
     }
 }
 
-// Category Filter Section
-struct CategoryFilterSection: View {
-    @Binding var selectedCategory: TrendCategory?
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            HStack {
-                Text("Categories")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                Spacer()
-                
-                if selectedCategory != nil {
-                    Button("Clear") {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            selectedCategory = nil
-                        }
-                    }
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(.white.opacity(0.8))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        Capsule()
-                            .fill(.ultraThinMaterial)
-                            .overlay(
-                                Capsule()
-                                    .stroke(.white.opacity(0.15), lineWidth: 1)
-                            )
-                    )
-                }
-            }
-            .padding(.horizontal, 24)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(TrendCategory.allCases, id: \.self) { category in
-                        CategoryPill(
-                            category: category,
-                            isSelected: selectedCategory == category
-                        ) {
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                selectedCategory = selectedCategory == category ? nil : category
-                            }
-                        }
-                    }
-                }
-                .padding(.horizontal, 24)
-            }
-        }
-    }
-}
-
-// Category Pill
-struct CategoryPill: View {
+// Sleek Category Card
+struct CategoryCard: View {
     let category: TrendCategory
     let isSelected: Bool
+    let trendsCount: Int
     let action: () -> Void
     
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 8) {
-                Image(systemName: category.icon)
-                    .font(.system(size: 14, weight: .semibold))
+            HStack(spacing: 12) {
+                // Compact icon
+                ZStack {
+                    Circle()
+                        .fill(
+                            isSelected 
+                            ? category.color.opacity(0.2)
+                            : Color.white.opacity(0.1)
+                        )
+                        .frame(width: 36, height: 36)
+                    
+                    Image(systemName: category.icon)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(
+                            isSelected ? category.color : .white.opacity(0.8)
+                        )
+                }
                 
-                Text(category.rawValue)
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-            }
-            .foregroundColor(isSelected ? .white : .white.opacity(0.8))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(
-                Capsule()
-                    .fill(
-                        isSelected
-                        ? LinearGradient(
-                            colors: [category.color, category.color.opacity(0.8)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                        : LinearGradient(
-                            colors: [.clear, .clear],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .overlay(
-                        Capsule()
-                            .stroke(
-                                isSelected ? category.color.opacity(0.3) : .white.opacity(0.2),
-                                lineWidth: 1
-                            )
-                    )
-            )
-            .scaleEffect(isSelected ? 1.05 : 1.0)
-            .shadow(color: isSelected ? category.color.opacity(0.3) : .clear, radius: 8, x: 0, y: 4)
-        }
-        .animation(.easeInOut(duration: 0.2), value: isSelected)
-    }
-}
-
-// Trend Carousel Section
-struct TrendCarouselSection: View {
-    let title: String
-    let subtitle: String
-    let trends: [Trend]
-    let showSeeAll: Bool
-    let seeAllAction: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            // Enhanced section header
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                // Text content
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(category.rawValue)
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text(subtitle)
-                        .font(.system(size: 14, weight: .medium))
+                    Text("\(trendsCount) styles")
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundColor(.white.opacity(0.6))
                 }
                 
                 Spacer()
                 
-                if showSeeAll {
-                    Button(action: seeAllAction) {
-                        HStack(spacing: 6) {
-                            Text("See All")
-                                .font(.system(size: 15, weight: .semibold))
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 12, weight: .semibold))
-                        }
-                        .foregroundColor(.white.opacity(0.8))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(
-                            Capsule()
-                                .fill(.ultraThinMaterial)
-                                .overlay(
-                                    Capsule()
-                                        .stroke(.white.opacity(0.15), lineWidth: 1)
-                                )
-                        )
-                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
-                    }
+                // Selection indicator
+                if isSelected {
+                    Circle()
+                        .fill(category.color)
+                        .frame(width: 6, height: 6)
                 }
             }
-            .padding(.horizontal, 24)
-            
-            // Enhanced trend cards carousel
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(trends, id: \.name) { trend in
-                        TrendCard(trend: trend)
-                        
-                    }
-                }
-                .padding(.horizontal, 24)
-            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(
+                        isSelected 
+                        ? .ultraThinMaterial
+                        : .thickMaterial
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .stroke(
+                                isSelected 
+                                ? category.color.opacity(0.3)
+                                : Color.white.opacity(0.1),
+                                lineWidth: isSelected ? 1.5 : 0.5
+                            )
+                    )
+            )
+            .scaleEffect(isSelected ? 1.01 : 1.0)
+            .shadow(
+                color: isSelected ? category.color.opacity(0.15) : .black.opacity(0.05),
+                radius: isSelected ? 8 : 2,
+                x: 0, y: isSelected ? 4 : 1
+            )
         }
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
     }
 }
 
-// Individual Trend Card
-struct TrendCard: View {
+// Enhanced Trend Card  
+struct SimpleTrendCard: View {
     let trend: Trend
+    @Binding var hideTabBar: Bool
     @State private var isPressed = false
     
     var body: some View {
-        NavigationLink(destination: ContentView(selectedTrend: trend)) {
+                                NavigationLink(destination: ContentView(selectedTrend: trend)
+                            .onAppear { hideTabBar = true }
+                            .onDisappear { hideTabBar = false }
+                        ) {
             ZStack {
-                // Multi-layer background card
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                // Enhanced card background
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(.ultraThinMaterial)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
                             .stroke(
                                 LinearGradient(
                                     colors: [
@@ -369,18 +357,19 @@ struct TrendCard: View {
                                 lineWidth: 1
                             )
                     )
-                    .frame(width: 160, height: 200)
+                    .aspectRatio(0.75, contentMode: .fit)
                     .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
                     .shadow(color: trend.color.opacity(0.05), radius: 12, x: 0, y: 6)
                 
-                // Full-size trend image
+                // Trend image
                 Image(trend.image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 160, height: 200)
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .frame(width: 170, height: 230)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 
-                // Gradient overlay for text readability
+                // Enhanced gradient overlay
                 LinearGradient(
                     colors: [
                         .clear,
@@ -391,11 +380,11 @@ struct TrendCard: View {
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 
-                // Overlayed content
+                // Content overlay
                 VStack {
-                    // Popularity badge at top
+                    // Enhanced popularity badge
                     HStack {
                         Spacer()
                         Text(trend.popularity.rawValue)
@@ -420,17 +409,17 @@ struct TrendCard: View {
                     
                     Spacer()
                     
-                    // Trend name at bottom
+                    // Enhanced title area
                     VStack(spacing: 4) {
                         Text(trend.name)
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
                             .lineLimit(2)
                             .shadow(color: .black.opacity(0.8), radius: 4, x: 0, y: 2)
                     }
                     .padding(.horizontal, 12)
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 12)
                 }
             }
             .scaleEffect(isPressed ? 0.95 : 1.0)
@@ -443,5 +432,6 @@ struct TrendCard: View {
 }
 
 #Preview {
-    TrendsView()
+    @State var hideTabBar = false
+    return TrendsView(hideTabBar: $hideTabBar)
 } 

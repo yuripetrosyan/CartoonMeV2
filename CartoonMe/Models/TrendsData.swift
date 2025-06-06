@@ -42,28 +42,17 @@ class TrendsData {
         ),
         
         Trend(
-            name: "Disney Pixar",
-            description: "Turn real photos into vibrant Disney/Pixar animated movie-style characters with big expressive eyes and cute proportions.",
+            name: "Cyberpunk 2077",
+            description: "Transform into a futuristic cyberpunk character with neon-lit cityscape, chrome implants, and high-tech street fashion.",
             color: .cyan,
-            icon: "sparkles",
-            image: "DisneyPixarImage",
+            icon: "bolt.fill",
+            image: "CyberpunkImage",
             category: .stylized,
             popularity: .viral,
-            prompt: "Transform this photo into a vibrant Pixar-style character illustration, keeping the subject's main facial features and personal traits. Use vivid colors, smooth 3D shading, and a whimsical animated background that matches their personality. The image should look like a scene from a Pixar movie, with the person (or pet) depicted as a lovable animated character.",
-            tags: ["Disney", "Pixar", "Animation", "3D", "Cartoon"]
+            prompt: "Transform this photo into a cyberpunk-style character. Give them futuristic cybernetic enhancements (glowing eyes, chrome implants, tech tattoos), stylish street fashion with neon accents, and place them in a neon-lit cityscape background with holographic advertisements and rain-soaked streets. Use vibrant cyan, magenta, and electric blue lighting effects to create that iconic cyberpunk aesthetic.",
+            tags: ["Cyberpunk", "Futuristic", "Neon", "Chrome", "Sci-Fi"]
         ),
         
-        Trend(
-            name: "Anime Manga",
-            description: "Convert photos into Japanese anime-style portraits with big sparkly eyes, cel-shaded coloring, and dramatic anime hairstyles.",
-            color: .purple,
-            icon: "star.fill",
-            image: "AnimeMangaImage",
-            category: .stylized,
-            popularity: .viral,
-            prompt: "Turn the subject of this photo into a Japanese anime-style portrait. Preserve their key facial features, but render them with bold anime line art, large expressive eyes, and vibrant cel-shaded colors. The final image should resemble a frame from an anime film or a character illustration from a manga.",
-            tags: ["Anime", "Manga", "Japanese", "Eyes", "Stylized"]
-        ),
         
         Trend(
             name: "Tim Burton Gothic",
@@ -72,7 +61,7 @@ class TrendsData {
             icon: "moon.fill",
             image: "TimBurtonGothicImage",
             category: .stylized,
-            popularity: .popular,
+            popularity: .viral,
             prompt: "Convert the subject in the photo into a Tim Burton-style character. Give them a slightly exaggerated, gothic look: think pale complexion, huge round eyes with dark circles, and quirky, Tim Burton-esque attire (striped or Victorian-inspired clothing). The background should have a whimsical spooky atmosphere (like a moonlit night or spiral hill), to capture that Burton film vibe.",
             tags: ["Tim Burton", "Gothic", "Spooky", "Pale", "Dark"]
         ),
@@ -108,7 +97,7 @@ class TrendsData {
             icon: "rectangle.portrait.fill",
             image: "PokemonCardImage",
             category: .gaming,
-            popularity: .rising,
+            popularity: .trending,
             prompt: "Create a custom Pokémon-style trading card featuring the subject of the photo. Portray them as a Pokémon character (for a pet, it can be an actual creature; for a person, a trainer or humanoid Pokémon). Include card elements: an illustrated figure of the subject in Pokémon art style (bold outlines, bright colors), a fitting elemental background (like fire, water splash, forest), and a card layout around it (title at top, some stats or moves at bottom). The image should emulate the look of an official Pokémon card.",
             tags: ["Pokémon", "Trading Card", "Gaming", "Nintendo", "Collectible"]
         )
