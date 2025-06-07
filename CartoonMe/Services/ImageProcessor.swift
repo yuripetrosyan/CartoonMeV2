@@ -694,8 +694,8 @@ class ImageProcessor {
     private func generateProfessionalHeadshot(prompt: String, referenceImage: UIImage) async throws -> UIImage {
         let openAIKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] ?? ""
         
-        // Calculate optimal dimensions maintaining aspect ratio
-        let targetSize = self.calculateOptimalSize(for: referenceImage.size)
+        // Force portrait orientation for headshots (1024x1536)
+        let targetSize = CGSize(width: 1024, height: 1536)
         let editURL = URL(string: "https://api.openai.com/v1/images/edits")!
         
         // Prepare the image data

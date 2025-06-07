@@ -13,6 +13,12 @@ import ActivityKit
 
 @main
 struct CartoonMeApp: App {
+    
+    init() {
+        // Initialize the AdMob singleton when the app starts
+        _ = AdMobManager.shared
+    }
+    
     var body: some Scene {
         WindowGroup {
             MainTabBarView()

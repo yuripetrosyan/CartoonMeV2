@@ -33,6 +33,11 @@ struct ContentView: View {
     
     @State private var selectedImages: [UIImage] = []
     
+    // 🧪 AD INTEGRATION - COMMENTED OUT FOR LATER USE
+    // @StateObject private var adManager = AdManager.shared
+    // @State private var showingInterstitialAd = false
+    // @State private var showingRewardedAdOption = false
+    
     // Save to Photos states
 
     
@@ -238,6 +243,95 @@ struct ContentView: View {
                             
                             // Enhanced Action Buttons Section
                             VStack(spacing: 16) {
+                                // Processing section with test ads
+                                if isProcessing {
+                                    VStack(spacing: 16) {
+                                        // Progress indicator
+                                        VStack(spacing: 16) {
+                                            if let progressImage = progressImage {
+                                                Image(uiImage: progressImage)
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(maxHeight: 200)
+                                                    .cornerRadius(12)
+                                            }
+                                            
+                                            VStack(spacing: 8) {
+                                                ProgressView(value: progressValue)
+                                                    .progressViewStyle(LinearProgressViewStyle(tint: .white))
+                                                    .background(Color.gray.opacity(0.3))
+                                                    .cornerRadius(4)
+                                                
+                                                Text("Processing... \(Int(progressValue * 100))%")
+                                                    .font(.caption)
+                                                    .foregroundColor(.white.opacity(0.8))
+                                            }
+                                            
+                                            Button("Cancel") {
+                                                cancelProcessing = true
+                                                isProcessing = false
+                                            }
+                                            .foregroundColor(.red)
+                                            .padding(.horizontal, 20)
+                                            .padding(.vertical, 8)
+                                            .background(.ultraThinMaterial)
+                                            .cornerRadius(8)
+                                        }
+                                        
+                                        // 🧪 AD INTEGRATION - Test Banner Ad (COMMENTED OUT)
+                                        // VStack(spacing: 8) {
+                                        //     Text("💰 AD REVENUE TEST")
+                                        //         .font(.caption2)
+                                        //         .foregroundColor(.white.opacity(0.7))
+                                        //     
+                                        //     TestBannerAdView()
+                                        //         .padding(.horizontal, 20)
+                                        // }
+                                    }
+                                }
+                                
+                                // 🧪 AD INTEGRATION - Rewarded Video Ad Option (COMMENTED OUT)
+                                // if selectedImage != nil && !isProcessing && processedImage == nil {
+                                //     VStack(spacing: 12) {
+                                //         Button(action: {
+                                //             showingRewardedAdOption = true
+                                //         }) {
+                                //             HStack(spacing: 12) {
+                                //                 Image(systemName: "play.circle.fill")
+                                //                     .foregroundColor(.green)
+                                //                 
+                                //                 VStack(alignment: .leading, spacing: 2) {
+                                //                     Text("🧪 Watch Ad for Faster Processing")
+                                //                         .font(.system(size: 14, weight: .semibold))
+                                //                         .foregroundColor(.white)
+                                //                     
+                                //                     Text("Earn $0.25 • Skip processing queue")
+                                //                         .font(.caption)
+                                //                         .foregroundColor(.white.opacity(0.7))
+                                //                 }
+                                //                 
+                                //                 Spacer()
+                                //                 
+                                //                 Text("TEST")
+                                //                     .font(.caption2)
+                                //                     .padding(.horizontal, 8)
+                                //                     .padding(.vertical, 4)
+                                //                     .background(.green.opacity(0.2))
+                                //                     .foregroundColor(.green)
+                                //                     .cornerRadius(6)
+                                //             }
+                                //             .padding(16)
+                                //             .background(.ultraThinMaterial)
+                                //             .cornerRadius(12)
+                                //             .overlay(
+                                //                 RoundedRectangle(cornerRadius: 12)
+                                //                     .stroke(.white.opacity(0.1), lineWidth: 1)
+                                //             )
+                                //         }
+                                //         .padding(.horizontal, 20)
+                                //     }
+                                // }
+                                
                                 // Progress indicator
                                 if isProcessing {
                                     VStack(spacing: 12) {
@@ -507,6 +601,53 @@ struct ContentView: View {
         }
         .navigationTitle(selectedTrend?.name ?? selectedHeadshotStyle?.rawValue ?? selectedTheme.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
+        // Test Ad Overlays
+        // .overlay(
+        //     TestInterstitialAdView(isShowing: $showingInterstitialAd) {
+        //         showingInterstitialAd = false
+        //     }
+        // )
+        // Test Ad Revenue Display
+        // .overlay(alignment: .topTrailing) {
+        //     if adManager.adEarnings > 0 {
+        //         VStack(alignment: .trailing, spacing: 4) {
+        //             Text("💰 Test Revenue")
+        //                 .font(.caption2)
+        //                 .foregroundColor(.white.opacity(0.7))
+        //             
+        //             Text("$\(String(format: "%.2f", adManager.adEarnings))")
+        //                 .font(.system(size: 16, weight: .bold))
+        //                 .foregroundColor(.green)
+        //                 .padding(.horizontal, 12)
+        //                 .padding(.vertical, 6)
+        //                 .background(.ultraThinMaterial)
+        //                 .cornerRadius(20)
+        //             
+        //             Button("Reset") {
+        //                 adManager.resetEarnings()
+        //             }
+        //             .font(.caption2)
+        //             .foregroundColor(.white.opacity(0.7))
+        //         }
+        //         .padding(.top, 60)
+        //         .padding(.trailing, 20)
+        //     }
+        // }
+        // 🧪 AD INTEGRATION - Test Rewarded Video Alert (COMMENTED OUT)
+        // .alert("🧪 Test Rewarded Video", isPresented: $showingRewardedAdOption) {
+        //     Button("Watch Ad (+$0.25)") {
+        //         // adManager.showRewardedAd { success in
+        //         //     if success {
+        //         //         // Simulate faster processing or premium feature
+        //         //         processImage()
+        //         //     }
+        //         // }
+        //     }
+        //     Button("Skip", role: .cancel) {}
+        // } message: {
+        //     Text("Watch a test ad to simulate earning revenue and unlocking faster processing!")
+        // }
     }
     
     private func processImage() {
@@ -540,6 +681,14 @@ struct ContentView: View {
                     if !self.cancelProcessing {
                         if let result = result {
                             self.processedImage = result
+                            
+                            // 🧪 TEST: Show interstitial ad after successful generation
+                            // DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            //     if adManager.isAdLoaded {
+                            //         adManager.showInterstitialAd()
+                            //         showingInterstitialAd = true
+                            //     }
+                            // }
                             
                             // Complete the Dynamic Island activity
                             CartoonProcessingManager.shared.completeActivity()
@@ -576,6 +725,14 @@ struct ContentView: View {
                         if let result = result {
                             self.processedImage = result
                             
+                            // 🧪 TEST: Show interstitial ad after successful generation
+                            // DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            //     if adManager.isAdLoaded {
+                            //         adManager.showInterstitialAd()
+                            //         showingInterstitialAd = true
+                            //     }
+                            // }
+                            
                             // Complete the Dynamic Island activity
                             CartoonProcessingManager.shared.completeActivity()
                         } else {
@@ -610,6 +767,14 @@ struct ContentView: View {
                     if !self.cancelProcessing {
                         if let result = result {
                             self.processedImage = result
+                            
+                            // 🧪 TEST: Show interstitial ad after successful generation
+                            // DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            //     if adManager.isAdLoaded {
+                            //         adManager.showInterstitialAd()
+                            //         showingInterstitialAd = true
+                            //     }
+                            // }
                             
                             // Complete the Dynamic Island activity
                             CartoonProcessingManager.shared.completeActivity()

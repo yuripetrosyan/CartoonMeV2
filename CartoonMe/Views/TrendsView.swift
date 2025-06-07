@@ -115,6 +115,12 @@ struct TrendsView: View {
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
                         
+                        
+                        // 🎯 Elegant Banner Ad Section
+                        ElegantBannerAd()
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                        
                         // Hero Section - Featured/Most Popular Trends
                         if selectedCategory == nil {
                             VStack(spacing: 20) {

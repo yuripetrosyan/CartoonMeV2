@@ -2,15 +2,14 @@ import SwiftUI
 
 struct MainTabBarView: View {
     enum Tab: Int, CaseIterable {
-        case explore, account, aiVideo, aiHeadshots
+        case explore, account, settings, aiHeadshots
         
         var title: String {
             switch self {
-            case .explore: return "Cartoon"
-            case .account: return "Trends"
-            case .aiHeadshots: return "Headshot"
-            case .aiVideo: return "Video"
-           
+            case .explore: return "tab.cartoon".localized
+            case .account: return "tab.trends".localized
+            case .settings: return "tab.settings".localized
+            case .aiHeadshots: return "tab.headshot".localized
             }
         }
         
@@ -18,7 +17,7 @@ struct MainTabBarView: View {
             switch self {
             case .explore: return "sparkles"
             case .account: return "person.circle"
-            case .aiVideo: return "video.fill"
+            case .settings: return "gearshape"
             case .aiHeadshots: return "person.crop.square.filled.and.at.rectangle"
             }
         }
@@ -27,7 +26,7 @@ struct MainTabBarView: View {
             switch self {
             case .explore: return "sparkles"
             case .account: return "person.circle.fill"
-            case .aiVideo: return "video.fill"
+            case .settings: return "gearshape.fill"
             case .aiHeadshots: return "person.crop.square.filled.and.at.rectangle.fill"
             }
         }
@@ -36,9 +35,8 @@ struct MainTabBarView: View {
             switch self {
             case .explore: return .purple
             case .account: return .blue
+            case .settings: return .green
             case .aiHeadshots: return .orange
-            case .aiVideo: return .pink
-           
             }
         }
     }
@@ -61,15 +59,16 @@ struct MainTabBarView: View {
                     NavigationStack {
                         TrendsView(hideTabBar: $hideTabBar)
                     }
-                case .aiVideo:
-                    AIVideoPlaceholderView()
                 case .aiHeadshots:
                     HeadshotView(hideTabBar: $hideTabBar)
+                    
+                case .settings:
+                    SettingsView(hideTabBar: $hideTabBar)
                 }
             }
             .edgesIgnoringSafeArea(.all)
             
-            // Modern iOS 19 Style Tab Bar
+          
             if !hideTabBar {
                 ModernTabBar(selectedTab: $selectedTab, isPressed: $isPressed)
                     .offset(y: tabBarOffset)
@@ -89,36 +88,90 @@ struct MainTabBarView: View {
 struct ModernTabBar: View {
     @Binding var selectedTab: MainTabBarView.Tab
     @Binding var isPressed: [MainTabBarView.Tab: Bool]
+    @State private var highlightOffset: CGFloat = 0
+    @State private var tabWidth: CGFloat = 0
+    
+    // Computed property for tab-specific offset adjustments
+    private var offsetAdjustment: CGFloat {
+        switch selectedTab {
+        case .explore: return -12
+        case .account: return -8
+        case .settings: return -2
+        case .aiHeadshots: return 3
+        }
+    }
     
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(MainTabBarView.Tab.allCases, id: \.self) { tab in
-                ModernTabBarItem(
-                    tab: tab,
-                    isSelected: selectedTab == tab,
-                    isPressed: isPressed[tab] ?? false
-                ) {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                        selectedTab = tab
-                    }
-                } onPressChange: { pressing in
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        isPressed[tab] = pressing
+        GeometryReader { geometry in
+            let totalWidth = geometry.size.width - 20 // Account for horizontal padding
+            let tabCount = CGFloat(MainTabBarView.Tab.allCases.count)
+            let calculatedTabWidth = totalWidth / tabCount
+            
+            ZStack {
+                // Single sliding highlight that looks like the actual tab highlight
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                selectedTab.accentColor.opacity(0.3),
+                                selectedTab.accentColor.opacity(0.1)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 25, style: .continuous)
+                            .stroke(selectedTab.accentColor.opacity(0.4), lineWidth: 1)
+                    )
+                    .shadow(
+                        color: selectedTab.accentColor.opacity(0.3),
+                        radius: 8,
+                        x: 0,
+                        y: 4
+                    )
+                    .frame(width: 70, height: 60)
+                    .offset(x: highlightOffset + offsetAdjustment)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.7), value: highlightOffset)
+                    .animation(.easeInOut(duration: 0.3), value: selectedTab.accentColor)
+                
+                // Tab items (without individual highlights)
+                HStack(spacing: 0) {
+                    ForEach(MainTabBarView.Tab.allCases, id: \.self) { tab in
+                        ModernTabBarItem(
+                            tab: tab,
+                            isSelected: selectedTab == tab,
+                            isPressed: isPressed[tab] ?? false
+                        ) {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                selectedTab = tab
+                                updateHighlightPosition(for: tab, tabWidth: calculatedTabWidth)
+                            }
+                        } onPressChange: { pressing in
+                            withAnimation(.easeInOut(duration: 0.1)) {
+                                isPressed[tab] = pressing
+                            }
+                        }
                     }
                 }
             }
+            .onAppear {
+                tabWidth = calculatedTabWidth
+                updateHighlightPosition(for: selectedTab, tabWidth: calculatedTabWidth)
+            }
+            .onChange(of: selectedTab) { _, newTab in
+                updateHighlightPosition(for: newTab, tabWidth: calculatedTabWidth)
+            }
         }
+        .frame(height: 62)
         .padding(.horizontal, 10)
         .padding(.vertical, 11)
         .background(
             // Advanced Glassmorphism Background
             ZStack {
                 // Base material
-                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                RoundedRectangle(cornerRadius: 50, style: .continuous)
                     .fill(.ultraThinMaterial)
-                 
-                  
-                
                 // Gradient overlay for depth
                 RoundedRectangle(cornerRadius: 50, style: .continuous)
                     .fill(
@@ -132,6 +185,7 @@ struct ModernTabBar: View {
                             endPoint: .bottom
                         )
                     )
+                
                 
                 // Subtle border
                 RoundedRectangle(cornerRadius: 50, style: .continuous)
@@ -161,8 +215,14 @@ struct ModernTabBar: View {
             x: 0,
             y: 1
         )
-        .padding(.horizontal, 37)
-        .padding(.bottom, -15) // Adjusted for home indicator
+        .padding(.horizontal, 40)
+        .padding(.bottom, -20) // Adjusted for home indicator
+    }
+    
+    private func updateHighlightPosition(for tab: MainTabBarView.Tab, tabWidth: CGFloat) {
+        let tabIndex = CGFloat(MainTabBarView.Tab.allCases.firstIndex(of: tab) ?? 0)
+        let newOffset = (tabIndex * tabWidth) - ((CGFloat(MainTabBarView.Tab.allCases.count - 1) * tabWidth) / 2) + (tabWidth / 2) - (tabWidth - 10) / 2
+        highlightOffset = newOffset
     }
 }
 
@@ -215,35 +275,6 @@ struct ModernTabBarItem: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 0)
-            .background(
-                // Selection indicator background - sized to content
-                Group {
-                    if isSelected {
-                    RoundedRectangle(cornerRadius: 25, style: .continuous)
-                            .fill(
-                                LinearGradient(
-                                    colors: [
-                                        tab.accentColor.opacity(0.3),
-                                        tab.accentColor.opacity(0.1)
-                                    ],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius:35, style: .continuous)
-                                    .stroke(tab.accentColor.opacity(0.4), lineWidth: 1)
-                            )
-                            .shadow(
-                                color: tab.accentColor.opacity(0.3),
-                                radius: 8,
-                                x: 0,
-                                y: 4
-                            )
-                            .padding(-5)
-                    }
-                }
-            )
             .frame(maxWidth: .infinity)
             .scaleEffect(isPressed ? 0.9 : 1.0)
             .animation(.spring(response: 0.2, dampingFraction: 0.8), value: isPressed)
@@ -256,18 +287,7 @@ struct ModernTabBarItem: View {
     }
 }
 
-// Dummy placeholder views for illustration
-struct AIVideoPlaceholderView: View {
-    var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            Text("AI Video Coming Soon")
-                .font(.largeTitle)
-                .bold()
-                .foregroundColor(.white)
-        }
-    }
-}
+
 
 struct MainTabBarView_Previews: PreviewProvider {
     static var previews: some View {

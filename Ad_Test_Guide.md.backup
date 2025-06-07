@@ -1,0 +1,108 @@
+# 🧪 Ad Integration Test Guide
+
+## Overview
+This test implementation shows how ads would work in your CartoonMe app. It's designed to demonstrate the concept and user experience without requiring a real AdMob account.
+
+## Test Features Included
+
+### 🎯 AdManager.swift
+- **Test Mode**: Simulates real ad behavior without actual ads
+- **Banner Ads**: Shows during image processing 
+- **Interstitial Ads**: Displays after successful image generation
+- **Rewarded Video Ads**: Option to speed up processing for bonus revenue
+- **Revenue Tracking**: Tracks simulated earnings in console
+
+### 🎨 ContentView.swift Integration
+- **Processing Banner**: Test banner ad appears during image generation
+- **Rewarded Video Option**: Button to watch "ad" for faster processing  
+- **Interstitial Overlay**: Full-screen ad simulation after completion
+- **Revenue Display**: Shows test earnings in real-time
+
+## How to Test
+
+### 1. Run the App
+```bash
+# Build and run in simulator
+xcodebuild -project CartoonMe.xcodeproj -scheme CartoonMe -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
+```
+
+### 2. Test Banner Ads
+1. Select any theme/style in your app
+2. Choose an image and start processing
+3. **During processing**: You'll see a test banner ad with "💰 AD REVENUE TEST"
+4. The banner simulates a real AdMob banner placement
+
+### 3. Test Rewarded Video Ads  
+1. Before starting processing, tap "Watch Ad for Faster Processing"
+2. Alert will show simulated rewarded video experience
+3. Console will log: `💰 Ad revenue: +$0.25`
+4. Processing speed increases (simulated)
+
+### 4. Test Interstitial Ads
+1. Complete any image generation successfully
+2. After 0.5 seconds, an interstitial ad overlay appears
+3. Shows full-screen ad simulation with "CLOSE AD" button
+4. Console logs: `💰 Ad revenue: +$0.15`
+
+## Test Ad Revenue Simulation
+
+| Ad Type | Simulated Revenue | When It Shows |
+|---------|------------------|---------------|
+| **Banner** | $0.02/impression | During processing |
+| **Interstitial** | $0.15/click | After successful generation |
+| **Rewarded Video** | $0.25/completion | Optional before processing |
+
+## Console Output Example
+```
+💰 Ad revenue: +$0.02 (Total: $0.02)
+💰 Ad revenue: +$0.25 (Total: $0.27)  
+💰 Ad revenue: +$0.15 (Total: $0.42)
+```
+
+## Real Implementation Notes
+
+When you're ready to implement real ads:
+
+1. **Add Google AdMob SDK**:
+   ```swift
+   // In Xcode: File → Add Package Dependencies
+   // URL: https://github.com/googleads/swift-package-manager-google-mobile-ads
+   ```
+
+2. **Get AdMob App ID**:
+   - Create account at [AdMob](https://admob.google.com)
+   - Add your app and get real App ID
+   - Replace test IDs in `AdManager.swift`
+
+3. **Update Info.plist**:
+   ```xml
+   <key>GADApplicationIdentifier</key>
+   <string>YOUR_REAL_APP_ID</string>
+   ```
+
+4. **Switch Test Mode**:
+   ```swift
+   // In AdManager.swift
+   private let testMode = false  // Change to false
+   ```
+
+## Expected Revenue (Real Implementation)
+
+Based on industry averages:
+- **Banner Ads**: $1-3 eCPM
+- **Interstitial Ads**: $3-8 eCPM  
+- **Rewarded Video**: $5-15 eCPM
+
+With your $0.06 processing cost, you could achieve **65-75% profit margins** with strategic ad placement.
+
+## Test Success Indicators
+
+✅ **Banner ad shows during processing**  
+✅ **Rewarded video option appears**  
+✅ **Interstitial shows after completion**  
+✅ **Revenue tracking in console**  
+✅ **No impact on app performance**
+
+---
+
+🎉 **Ready to test!** Run your app and try generating an image to see all ad types in action. 

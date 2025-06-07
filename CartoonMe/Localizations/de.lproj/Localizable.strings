@@ -1,0 +1,59 @@
+/* 
+   Localizable.strings (German)
+   CartoonMe
+*/
+
+// MARK: - Tab Bar
+"tab.cartoon" = "Cartoon";
+"tab.trends" = "Trends";
+"tab.settings" = "Einstellungen";
+"tab.headshot" = "Porträt";
+
+// MARK: - Settings
+"settings.title" = "Einstellungen";
+"settings.advertisements" = "Werbung";
+"settings.disable_ads" = "Werbung deaktivieren";
+"settings.disable_ads_description" = "Alle Werbung aus der App entfernen";
+"settings.app_info" = "App-Informationen";
+"settings.language" = "Sprache";
+"settings.select_language" = "Sprache auswählen";
+"settings.reset" = "Zurücksetzen";
+"settings.reset_all" = "Alles zurücksetzen";
+"settings.reset_alert_title" = "Einstellungen zurücksetzen";
+"settings.reset_alert_message" = "Dies setzt alle Einstellungen auf ihre Standardwerte zurück. Sind Sie sicher?";
+"settings.cancel" = "Abbrechen";
+"settings.version" = "Version";
+"settings.build" = "Build";
+"settings.developer" = "Entwickler";
+
+// MARK: - Languages
+"language.english" = "Englisch";
+"language.spanish" = "Spanisch";
+"language.french" = "Französisch";
+"language.german" = "Deutsch";
+"language.italian" = "Italienisch";
+"language.portuguese" = "Portugiesisch";
+"language.russian" = "Russisch";
+"language.chinese" = "Chinesisch";
+"language.japanese" = "Japanisch";
+"language.korean" = "Koreanisch";
+
+// MARK: - Common
+"common.done" = "Fertig";
+"common.save" = "Speichern";
+"common.ok" = "OK";
+"common.yes" = "Ja";
+"common.no" = "Nein";
+
+// MARK: - Theme Selection
+"theme.title" = "Wählen Sie Ihren Stil";
+"theme.subtitle" = "Verwandeln Sie Ihre Fotos mit KI";
+"theme.processing" = "Verarbeitung...";
+"theme.select_photo" = "Foto auswählen";
+
+// MARK: - Trends
+"trends.title" = "Angesagte Stile";
+"trends.subtitle" = "Beliebte Transformationen";
+
+// MARK: - General
+"app.name" = "CartoonMe"; 

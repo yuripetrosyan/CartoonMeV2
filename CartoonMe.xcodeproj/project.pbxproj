@@ -10,6 +10,7 @@
 		920A78F22DDE4CE500A7BC99 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 920A78F12DDE4CE500A7BC99 /* WidgetKit.framework */; };
 		920A78F42DDE4CE500A7BC99 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 920A78F32DDE4CE500A7BC99 /* SwiftUI.framework */; };
 		920A79052DDE4CE600A7BC99 /* CartoonMeWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 920A78EF2DDE4CE500A7BC99 /* CartoonMeWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		929E54FA2DF4A140005F2B42 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 929E54F92DF4A140005F2B42 /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				CartoonMeWidget.swift,
+				Info.plist,
 				Views/DynamicIslandViews.swift,
 			);
 			target = 92FB795C2DA7C7200090DB07 /* CartoonMe */;
@@ -130,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				929E54FA2DF4A140005F2B42 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +229,7 @@
 			);
 			name = CartoonMe;
 			packageProductDependencies = (
+				929E54F92DF4A140005F2B42 /* GoogleMobileAds */,
 			);
 			productName = CartoonMe;
 			productReference = 92FB795D2DA7C7200090DB07 /* CartoonMe.app */;
@@ -309,9 +313,15 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
+				fr,
+				de,
 			);
 			mainGroup = 92FB79542DA7C7200090DB07;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				929E54F82DF4A140005F2B42 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 92FB795E2DA7C7200090DB07 /* Products */;
 			projectDirPath = "";
@@ -590,9 +600,11 @@
 				DEVELOPMENT_TEAM = ZT829445M9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CartoonMe/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -622,9 +634,11 @@
 				DEVELOPMENT_TEAM = ZT829445M9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CartoonMe/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -764,6 +778,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		929E54F82DF4A140005F2B42 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		929E54F92DF4A140005F2B42 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 929E54F82DF4A140005F2B42 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 92FB79552DA7C7200090DB07 /* Project object */;
 }

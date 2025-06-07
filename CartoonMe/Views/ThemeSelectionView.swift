@@ -164,6 +164,11 @@ struct ThemeSelectionView: View {
                         }
                         .padding(.horizontal, 28)
                  
+                        // 🎯 Elegant Banner Ad Section
+                        ElegantBannerAd()
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                        
                         // Enhanced Main Themes Carousel
                         CarouselSection(
                             title: "Most Popular",
