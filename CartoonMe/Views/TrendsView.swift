@@ -116,8 +116,8 @@ struct TrendsView: View {
                         .padding(.top, 16)
                         
                         
-                        // 🎯 Elegant Banner Ad Section
-                        ElegantBannerAd()
+                        // 🎯 Native Ad Section
+                        ElegantNativeAdvancedAd()
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
                         

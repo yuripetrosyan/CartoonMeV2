@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MainTabBarView: View {
     enum Tab: Int, CaseIterable {
-        case explore, account, settings, aiHeadshots
+        case explore, account, aiHeadshots, settings
         
         var title: String {
             switch self {
@@ -96,8 +96,8 @@ struct ModernTabBar: View {
         switch selectedTab {
         case .explore: return -12
         case .account: return -8
-        case .settings: return -2
-        case .aiHeadshots: return 3
+        case .aiHeadshots: return -2
+        case .settings: return 3
         }
     }
     
@@ -130,8 +130,8 @@ struct ModernTabBar: View {
                         x: 0,
                         y: 4
                     )
-                    .frame(width: 70, height: 60)
-                    .offset(x: highlightOffset + offsetAdjustment)
+                    .frame(width: 70, height: 56)
+                    .offset(x: highlightOffset + offsetAdjustment, y: -2)
                     .animation(.spring(response: 0.5, dampingFraction: 0.7), value: highlightOffset)
                     .animation(.easeInOut(duration: 0.3), value: selectedTab.accentColor)
                 
@@ -163,7 +163,8 @@ struct ModernTabBar: View {
                 updateHighlightPosition(for: newTab, tabWidth: calculatedTabWidth)
             }
         }
-        .frame(height: 62)
+        //change
+        .frame(height: 50)
         .padding(.horizontal, 10)
         .padding(.vertical, 11)
         .background(

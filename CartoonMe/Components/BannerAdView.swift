@@ -2,11 +2,10 @@ import SwiftUI
 import GoogleMobileAds
 import UIKit
 
-// MARK: - Banner Ad View (Working Implementation)
+// MARK: - Banner Ad View (Now Using Native Advanced)
 struct BannerAdView: View {
     var body: some View {
-        AdBannerView()
-            .frame(width: 320, height: 50)
+        NativeAdvancedAdView()
     }
 }
 
@@ -32,38 +31,9 @@ struct AdBannerView: UIViewRepresentable {
     func updateUIView(_ uiView: GoogleMobileAds.BannerView, context: Context) {}
 }
 
-// MARK: - Elegant Banner Ad Container
+// MARK: - Elegant Banner Ad Container (Now Native Advanced)
 struct ElegantBannerAd: View {
-    @StateObject private var adMobManager = AdMobManager.shared
-    @StateObject private var settingsManager = UserSettingsManager.shared
-    @State private var isVisible = false
-
     var body: some View {
-        VStack {
-            if isVisible && settingsManager.shouldShowAds() {
-                BannerAdView()
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-            }
-        }
-        .animation(.easeInOut(duration: 0.5), value: isVisible)
-        .onChange(of: settingsManager.adsDisabled) { _, _ in
-            // When ads are disabled, hide immediately
-            if settingsManager.adsDisabled {
-                isVisible = false
-            } else if adMobManager.isInitialized {
-                // When ads are re-enabled, show with delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.isVisible = true
-                }
-            }
-        }
-        .onAppear {
-            // Only show ads if they're not disabled
-            if settingsManager.shouldShowAds() && adMobManager.isInitialized {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.isVisible = true
-                }
-            }
-        }
+        ElegantNativeAdvancedAd()
     }
 }

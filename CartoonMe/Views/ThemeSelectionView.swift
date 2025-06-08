@@ -164,8 +164,8 @@ struct ThemeSelectionView: View {
                         }
                         .padding(.horizontal, 28)
                  
-                        // 🎯 Elegant Banner Ad Section
-                        ElegantBannerAd()
+                        // 🎯 Native Ad Section
+                        ElegantNativeAdvancedAd()
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
                         

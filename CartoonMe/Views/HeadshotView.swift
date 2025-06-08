@@ -367,21 +367,21 @@ enum HeadshotStyle: String, CaseIterable, Identifiable {
     var apiPrompt: String {
         switch self {
         case .casual:
-            return "Professional casual headshot, warm lighting, approachable expression, business casual attire, clean background, natural smile, confident posture"
+            return "Professional casual headshot preserving exact facial features, bone structure, and distinctive characteristics of the person. Maintain their natural eye color, facial proportions, and unique features. Warm professional lighting, approachable expression, business casual attire, clean background, natural smile, confident posture. Focus on photorealistic likeness preservation."
         case .office:
-            return "Corporate office headshot, professional lighting, business attire, neutral background, confident expression, workplace appropriate styling"
+            return "Corporate office headshot maintaining precise facial likeness and personal features. Preserve the person's exact eye shape, nose structure, jawline, and all distinctive facial characteristics. Professional lighting, business attire, neutral background, confident expression, workplace appropriate styling. Emphasize photorealistic facial accuracy."
         case .corporate:
-            return "Executive corporate headshot, high-end professional lighting, formal business suit, clean corporate background, authoritative yet approachable expression"
+            return "Executive corporate headshot preserving individual facial identity and unique features. Maintain the person's exact facial structure, eye color, distinctive marks, and personal characteristics. High-end professional lighting, formal business suit, clean corporate background, authoritative yet approachable expression. Priority on maintaining facial likeness."
         case .creative:
-            return "Creative professional headshot, artistic lighting, modern styling, creative industry appropriate, dynamic background, innovative and confident expression"
+            return "Creative professional headshot keeping exact personal facial features and individual characteristics. Preserve the person's unique facial structure, expressions, and distinctive traits. Artistic lighting, modern styling, creative industry appropriate, dynamic background, innovative and confident expression. Focus on maintaining person's identity."
         case .formal:
-            return "Formal professional headshot, classic lighting, traditional formal attire, elegant background, sophisticated and trustworthy expression"
+            return "Formal professional headshot maintaining precise facial resemblance and personal features. Preserve the person's exact bone structure, eye details, and all individual characteristics. Classic lighting, traditional formal attire, elegant background, sophisticated and trustworthy expression. Emphasize accurate facial representation."
         case .linkedin:
-            return "LinkedIn professional headshot, optimal lighting for social media, professional attire, clean background, trustworthy and approachable expression"
+            return "LinkedIn professional headshot preserving exact personal likeness and facial characteristics. Maintain the person's distinctive features, eye color, facial proportions, and unique traits. Optimal lighting for social media, professional attire, clean background, trustworthy and approachable expression. Priority on facial accuracy for professional networking."
         case .medical:
-            return "Medical professional headshot, clean clinical lighting, healthcare appropriate attire, sterile background, trustworthy and compassionate expression"
+            return "Medical professional headshot maintaining individual facial identity and personal characteristics. Preserve the person's exact facial features, expressions, and distinctive traits. Clean clinical lighting, healthcare appropriate attire, sterile background, trustworthy and compassionate expression. Focus on maintaining professional facial likeness."
         case .academic:
-            return "Academic professional headshot, scholarly lighting, educational appropriate attire, institutional background, knowledgeable and approachable expression"
+            return "Academic professional headshot preserving personal facial features and individual characteristics. Maintain the person's exact facial structure, eye details, and unique traits. Scholarly lighting, educational appropriate attire, institutional background, knowledgeable and approachable expression. Emphasize maintaining academic professional identity."
         }
     }
 }

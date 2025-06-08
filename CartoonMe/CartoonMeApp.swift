@@ -13,6 +13,7 @@ import ActivityKit
 
 @main
 struct CartoonMeApp: App {
+    @State private var showLaunchAnimation = true
     
     init() {
         // Initialize the AdMob singleton when the app starts
@@ -21,8 +22,18 @@ struct CartoonMeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainTabBarView()
+            if showLaunchAnimation {
+                LaunchAnimationView {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        showLaunchAnimation = false
+                    }
+                }
                 .preferredColorScheme(.dark)
+            } else {
+                MainTabBarView()
+                    .preferredColorScheme(.dark)
+                    .transition(.opacity)
+            }
         }
     }
 }

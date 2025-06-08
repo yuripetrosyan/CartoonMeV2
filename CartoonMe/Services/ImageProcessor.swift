@@ -711,8 +711,8 @@ class ImageProcessor {
         body.append("Content-Disposition: form-data; name=\"model\"\r\n\r\n".data(using: .utf8)!)
         body.append("gpt-image-1\r\n".data(using: .utf8)!)
         
-        // Add prompt - enhanced for headshot generation
-        let enhancedPrompt = "Transform this photo into a \(prompt). Maintain realistic human features and proportions. Focus on professional lighting, sharp details, and high image quality. Avoid cartoon, anime, or stylized artistic effects."
+        // Add prompt - enhanced for headshot generation with facial likeness preservation
+        let enhancedPrompt = "Transform this photo into a \(prompt). CRITICAL: Preserve the exact facial likeness, maintaining all distinctive features including eye shape, nose structure, jawline, skin tone, and any unique characteristics of this specific person. Keep their facial identity intact while applying the professional style. Focus on photorealistic enhancement with professional lighting, sharp details, and high image quality. Avoid cartoon, anime, or stylized artistic effects that would alter facial recognition."
         body.append("--\(boundary)\r\n".data(using: .utf8)!)
         body.append("Content-Disposition: form-data; name=\"prompt\"\r\n\r\n".data(using: .utf8)!)
         body.append("\(enhancedPrompt)\r\n".data(using: .utf8)!)

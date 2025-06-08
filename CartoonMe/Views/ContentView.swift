@@ -32,6 +32,13 @@ struct ContentView: View {
     @State private var testMode: Bool = false
     
     @State private var selectedImages: [UIImage] = []
+    @State private var showHeadshotPhotoReminder = false
+    
+    // Rewarded Ad Integration
+    @StateObject private var adMobManager = AdMobManager.shared
+    @State private var showingRewardedAd = false
+    @State private var hasWatchedRewardAd = false
+    @State private var showRewardBanner = false
     
     // 🧪 AD INTEGRATION - COMMENTED OUT FOR LATER USE
     // @StateObject private var adManager = AdManager.shared
@@ -129,7 +136,7 @@ struct ContentView: View {
                         
                         // Share button at bottom
                         Button(action: { 
-                            self.imageToShare = imageToShow
+                            self.imageToShare = processedImage
                             self.showingShareSheet = true
                         }) {
                             HStack(spacing: 10) {
@@ -243,52 +250,7 @@ struct ContentView: View {
                             
                             // Enhanced Action Buttons Section
                             VStack(spacing: 16) {
-                                // Processing section with test ads
-                                if isProcessing {
-                                    VStack(spacing: 16) {
-                                        // Progress indicator
-                                        VStack(spacing: 16) {
-                                            if let progressImage = progressImage {
-                                                Image(uiImage: progressImage)
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(maxHeight: 200)
-                                                    .cornerRadius(12)
-                                            }
-                                            
-                                            VStack(spacing: 8) {
-                                                ProgressView(value: progressValue)
-                                                    .progressViewStyle(LinearProgressViewStyle(tint: .white))
-                                                    .background(Color.gray.opacity(0.3))
-                                                    .cornerRadius(4)
-                                                
-                                                Text("Processing... \(Int(progressValue * 100))%")
-                                                    .font(.caption)
-                                                    .foregroundColor(.white.opacity(0.8))
-                                            }
-                                            
-                                            Button("Cancel") {
-                                                cancelProcessing = true
-                                                isProcessing = false
-                                            }
-                                            .foregroundColor(.red)
-                                            .padding(.horizontal, 20)
-                                            .padding(.vertical, 8)
-                                            .background(.ultraThinMaterial)
-                                            .cornerRadius(8)
-                                        }
-                                        
-                                        // 🧪 AD INTEGRATION - Test Banner Ad (COMMENTED OUT)
-                                        // VStack(spacing: 8) {
-                                        //     Text("💰 AD REVENUE TEST")
-                                        //         .font(.caption2)
-                                        //         .foregroundColor(.white.opacity(0.7))
-                                        //     
-                                        //     TestBannerAdView()
-                                        //         .padding(.horizontal, 20)
-                                        // }
-                                    }
-                                }
+                                
                                 
                                 // 🧪 AD INTEGRATION - Rewarded Video Ad Option (COMMENTED OUT)
                                 // if selectedImage != nil && !isProcessing && processedImage == nil {
@@ -361,11 +323,21 @@ struct ContentView: View {
                                     }
                                     .padding(.vertical, 20)
                                 }
-                                
-                                // Action buttons
-                                HStack(spacing: 12) {
+                                                            
+                            // Reward Banner (if user watched ad)
+                            RewardProcessingBanner(isVisible: showRewardBanner && isProcessing)
+                                .padding(.horizontal, 20)
+                            
+                            // Action buttons
+                            HStack(spacing: 12) {
                                     // Choose Photo Button
-                                    Button(action: { showingImagePicker = true }) {
+                                    Button(action: { 
+                                        if selectedHeadshotStyle != nil {
+                                            showHeadshotPhotoReminder = true
+                                        } else {
+                                            showingImagePicker = true
+                                        }
+                                    }) {
                                         HStack(spacing: 8) {
                                             Image(systemName: "plus.circle.fill")
                                                 .font(.system(size: 16, weight: .semibold))
@@ -423,7 +395,13 @@ struct ContentView: View {
                                             }
                                         } else {
                                             // Transform button
-                                            Button(action: { processImage() }) {
+                                            Button(action: { 
+                                                if adMobManager.shouldShowAds() && !hasWatchedRewardAd {
+                                                    showingRewardedAd = true
+                                                } else {
+                                                    processImage()
+                                                }
+                                            }) {
                                                 HStack(spacing: 8) {
                                                     Image(systemName: "wand.and.stars.inverse")
                                                         .font(.system(size: 16, weight: .semibold))
@@ -580,6 +558,9 @@ struct ContentView: View {
                         progressImage = nil
                         progressValue = 0
                     }
+                    // Reset reward ad states
+                    hasWatchedRewardAd = false
+                    showRewardBanner = false
                 }
             }
         }
@@ -594,14 +575,47 @@ struct ContentView: View {
             if let imageToShare = imageToShare {
                 ShareSheet(activityItems: [imageToShare])
                     .presentationDetents([.medium, .large])
+            } else {
+                // Fallback - this should not happen, but prevents empty sheets
+                Text("No image to share")
+                    .presentationDetents([.medium])
             }
         }
         .alert(isPresented: $showError) {
             Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         }
+        .alert("📸 Photo Tips for Best Results", isPresented: $showHeadshotPhotoReminder) {
+            Button("Got it, Choose Photo") { 
+                showingImagePicker = true 
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("For the best headshot results, please use:\n\n• A clear, well-lit selfie or portrait\n• Face clearly visible and not too far away\n• Good lighting on your face\n• Avoid sunglasses or face coverings\n• Look directly at the camera\n\nThis will help the AI create a more accurate professional headshot that looks like you!")
+               
+        }
+        .multilineTextAlignment(.leading)
         .navigationTitle(selectedTrend?.name ?? selectedHeadshotStyle?.rawValue ?? selectedTheme.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        .overlay(
+            // Rewarded Ad Overlay
+            Group {
+                if showingRewardedAd {
+                    RewardedAdView(
+                        isPresented: $showingRewardedAd,
+                        onRewardEarned: {
+                            hasWatchedRewardAd = true
+                            showRewardBanner = true
+                            processImage()
+                        },
+                        onDismissed: {
+                            // User dismissed without watching ad - don't process
+                            // They need to watch the ad to get free generation
+                        }
+                    )
+                }
+            }
+        )
         // Test Ad Overlays
         // .overlay(
         //     TestInterstitialAdView(isShowing: $showingInterstitialAd) {
