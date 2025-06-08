@@ -1,1 +1,4 @@
 *.xcscheme
+
+# Firebase/Google API config
+CartoonMe/GoogleService-Info (1).plist
