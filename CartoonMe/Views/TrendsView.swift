@@ -116,10 +116,10 @@ struct TrendsView: View {
                         .padding(.top, 16)
                         
                         
-                        // 🎯 Native Ad Section
-                        ElegantNativeAdvancedAd()
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
+                        // 🎯 Banner Ad Section
+//                        ElegantBannerAd()
+//                            .padding(.horizontal, 10)
+//                            .padding(.vertical, 5)
                         
                         // Hero Section - Featured/Most Popular Trends
                         if selectedCategory == nil {
@@ -139,16 +139,11 @@ struct TrendsView: View {
                                 }
                                 .padding(.horizontal, 24)
                                 
-                                // Grid layout for better use of space
-                                LazyVGrid(columns: [
-                                    GridItem(.flexible(minimum: 150), spacing: 12),
-                                    GridItem(.flexible(minimum: 150), spacing: 12)
-                                ], spacing: 16) {
-                                    ForEach(trendsData.trendingNow, id: \.name) { trend in
-                                        SimpleTrendCard(trend: trend, hideTabBar: $hideTabBar)
-                                    }
-                                }
-                                .padding(.horizontal, 24)
+                                TrendingGridContent(
+                                    trends: trendsData.trendingNow,
+                                    hideTabBar: $hideTabBar,
+                                    showAd: AdMobManager.shared.isNativeAdLoaded
+                                )
                             }
                         }
                         
@@ -231,15 +226,11 @@ struct TrendsView: View {
                                 }
                                 .padding(.horizontal, 24)
                                 
-                                LazyVGrid(columns: [
-                                    GridItem(.flexible(minimum: 150), spacing: 12),
-                                    GridItem(.flexible(minimum: 150), spacing: 12)
-                                ], spacing: 16) {
-                                    ForEach(trendsData.trends(for: selectedCategory), id: \.name) { trend in
-                                        SimpleTrendCard(trend: trend, hideTabBar: $hideTabBar)
-                                    }
-                                }
-                                .padding(.horizontal, 24)
+                                TrendingGridContent(
+                                    trends: trendsData.trends(for: selectedCategory),
+                                    hideTabBar: $hideTabBar,
+                                    showAd: false
+                                )
                             }
                         }
                         
@@ -434,6 +425,30 @@ struct SimpleTrendCard: View {
         .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity) { pressing in
             isPressed = pressing
         } perform: {}
+    }
+}
+
+// Add this new view before the TrendsView struct
+struct TrendingGridContent: View {
+    let trends: [Trend]
+    @Binding var hideTabBar: Bool
+    let showAd: Bool
+    
+    var body: some View {
+        LazyVGrid(columns: [
+            GridItem(.flexible(minimum: 150), spacing: 12),
+            GridItem(.flexible(minimum: 150), spacing: 12)
+        ], spacing: 16) {
+            ForEach(Array(zip(trends.indices, trends)), id: \.0) { index, trend in
+                if showAd && index == 2 {
+                    NativeAdCard()
+                        .frame(height: 230)
+                        .padding(.vertical, 2)
+                }
+                SimpleTrendCard(trend: trend, hideTabBar: $hideTabBar)
+            }
+        }
+        .padding(.horizontal, 24)
     }
 }
 

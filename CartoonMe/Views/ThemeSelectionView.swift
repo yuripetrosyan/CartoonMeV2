@@ -164,10 +164,10 @@ struct ThemeSelectionView: View {
                         }
                         .padding(.horizontal, 28)
                  
-                        // 🎯 Native Ad Section
-                        ElegantNativeAdvancedAd()
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
+//                        // 🎯 Native Ad Section
+//                        ElegantBannerAd()
+//                            .padding(.horizontal, 10)
+//                            .padding(.vertical, 5)
                         
                         // Enhanced Main Themes Carousel
                         CarouselSection(
@@ -320,6 +320,7 @@ struct CarouselSection: View {
     let showSeeAll: Bool
     let seeAllAction: () -> Void
     @Binding var hideTabBar: Bool
+    @StateObject private var adMobManager = AdMobManager.shared
     
     var body: some View {
         VStack(spacing: 20) {
@@ -365,7 +366,7 @@ struct CarouselSection: View {
             // Enhanced theme cards carousel
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
-                    ForEach(themes, id: \.name) { theme in
+                    ForEach(Array(zip(themes.indices, themes)), id: \.0) { index, theme in
                         NavigationLink(destination: ContentView(selectedTheme: theme)
                             .onAppear { hideTabBar = true }
                             .onDisappear { hideTabBar = false }
@@ -445,19 +446,49 @@ struct FeaturedBannerCarousel: View {
     let featuredThemes: [Theme]
     @Binding var hideTabBar: Bool
     @State private var currentIndex = 0
+    @StateObject private var adMobManager = AdMobManager.shared
+    
+    enum CarouselItem: Identifiable {
+        case theme(Theme)
+        case ad
+        
+        var id: String {
+            switch self {
+            case .theme(let theme): return theme.id.uuidString
+            case .ad: return "nativeAdCard"
+            }
+        }
+    }
+    
+    var carouselItems: [CarouselItem] {
+        guard adMobManager.isNativeAdLoaded, featuredThemes.count > 1 else {
+            return featuredThemes.map { .theme($0) }
+        }
+        var items = featuredThemes.map { CarouselItem.theme($0) }
+        items.insert(.ad, at: 2)
+        return items
+    }
     
     var body: some View {
         VStack(spacing: 12) {
             // Carousel
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
-                    ForEach(Array(featuredThemes.enumerated()), id: \.element.id) { index, theme in
-                        NavigationLink(destination: ContentView(selectedTheme: theme)
-                            .onAppear { hideTabBar = true }
-                            .onDisappear { hideTabBar = false }) {
-                            FeaturedBannerCard(theme: theme, isFirst: index == 0)
+                    ForEach(carouselItems) { item in
+                        switch item {
+                        case .ad:
+                            NativeAdCard()
+                                .frame(width: UIScreen.main.bounds.width - 48, height: 200)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                        case .theme(let theme):
+                            NavigationLink(destination: ContentView(selectedTheme: theme)
+                                .onAppear { hideTabBar = true }
+                                .onDisappear { hideTabBar = false }) {
+                                FeaturedBannerCard(theme: theme, isFirst: false)
+                            }
+                            .frame(width: UIScreen.main.bounds.width - 48)
                         }
-                        .frame(width: UIScreen.main.bounds.width - 48)
                     }
                 }
                 .padding(.horizontal, 24)
@@ -469,7 +500,7 @@ struct FeaturedBannerCarousel: View {
             
             // Page indicator
             HStack(spacing: 8) {
-                ForEach(0..<featuredThemes.count, id: \.self) { index in
+                ForEach(0..<carouselItems.count, id: \.self) { index in
                     Circle()
                         .fill(index == currentIndex ? Color.white : Color.white.opacity(0.4))
                         .frame(width: 8, height: 8)
