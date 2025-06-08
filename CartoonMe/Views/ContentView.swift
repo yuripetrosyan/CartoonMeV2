@@ -9,6 +9,7 @@
 import SwiftUI
 import PhotosUI
 import Photos
+import FirebaseAnalytics
 
 struct ContentView: View {
     let selectedTheme: Theme
@@ -325,8 +326,8 @@ struct ContentView: View {
                                 }
                                                             
                             // Reward Banner (if user watched ad)
-                            RewardProcessingBanner(isVisible: showRewardBanner && isProcessing)
-                                .padding(.horizontal, 20)
+                            // RewardProcessingBanner(isVisible: showRewardBanner && isProcessing)
+                            //     .padding(.horizontal, 20)
                             
                             // Action buttons
                             HStack(spacing: 12) {
@@ -605,7 +606,6 @@ struct ContentView: View {
                         isPresented: $showingRewardedAd,
                         onRewardEarned: {
                             hasWatchedRewardAd = true
-                            showRewardBanner = true
                             processImage()
                         },
                         onDismissed: {
@@ -662,6 +662,12 @@ struct ContentView: View {
         // } message: {
         //     Text("Watch a test ad to simulate earning revenue and unlocking faster processing!")
         // }
+        .onAppear {
+            Analytics.logEvent(AnalyticsEventScreenView, parameters: [
+                AnalyticsParameterScreenName: "ContentView",
+                AnalyticsParameterScreenClass: "ContentView"
+            ])
+        }
     }
     
     private func processImage() {
@@ -706,6 +712,12 @@ struct ContentView: View {
                             
                             // Complete the Dynamic Island activity
                             CartoonProcessingManager.shared.completeActivity()
+                            
+                            // Log a custom event to Firebase Analytics
+                            Analytics.logEvent("applied_style", parameters: [
+                                "style_name": selectedTheme.name,
+                                "category": selectedTrend?.name ?? selectedHeadshotStyle?.rawValue ?? "Theme"
+                            ])
                         } else {
                             self.errorMessage = "Failed to generate headshot. Please try again."
                             self.showError = true
@@ -749,6 +761,12 @@ struct ContentView: View {
                             
                             // Complete the Dynamic Island activity
                             CartoonProcessingManager.shared.completeActivity()
+                            
+                            // Log a custom event to Firebase Analytics
+                            Analytics.logEvent("applied_style", parameters: [
+                                "style_name": selectedTheme.name,
+                                "category": selectedTrend?.name ?? selectedHeadshotStyle?.rawValue ?? "Theme"
+                            ])
                         } else {
                             self.errorMessage = "Failed to process the image. Please try again."
                             self.showError = true
@@ -792,6 +810,12 @@ struct ContentView: View {
                             
                             // Complete the Dynamic Island activity
                             CartoonProcessingManager.shared.completeActivity()
+                            
+                            // Log a custom event to Firebase Analytics
+                            Analytics.logEvent("applied_style", parameters: [
+                                "style_name": selectedTheme.name,
+                                "category": selectedTrend?.name ?? selectedHeadshotStyle?.rawValue ?? "Theme"
+                            ])
                         } else {
                             self.errorMessage = "Failed to process the image. Please try again."
                             self.showError = true

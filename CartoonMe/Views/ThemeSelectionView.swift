@@ -7,6 +7,7 @@
 
 //do the next one for manga style, use a photo of a different person, and use other background colors
 import SwiftUI
+import FirebaseAnalytics
 
 struct ThemeSelectionView: View {
     @State private var showAllThemes = false
@@ -308,6 +309,10 @@ struct ThemeSelectionView: View {
         }
         .onAppear {
             hideTabBar = false
+            Analytics.logEvent(AnalyticsEventScreenView, parameters: [
+                AnalyticsParameterScreenName: "ThemeSelectionView",
+                AnalyticsParameterScreenClass: "ThemeSelectionView"
+            ])
         }
     }
 }

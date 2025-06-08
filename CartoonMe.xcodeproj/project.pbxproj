@@ -10,6 +10,11 @@
 		920A78F22DDE4CE500A7BC99 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 920A78F12DDE4CE500A7BC99 /* WidgetKit.framework */; };
 		920A78F42DDE4CE500A7BC99 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 920A78F32DDE4CE500A7BC99 /* SwiftUI.framework */; };
 		920A79052DDE4CE600A7BC99 /* CartoonMeWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 920A78EF2DDE4CE500A7BC99 /* CartoonMeWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		927BACD72DF609E3009A63A7 /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACD62DF609E3009A63A7 /* FirebaseAI */; };
+		927BACD92DF609E3009A63A7 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACD82DF609E3009A63A7 /* FirebaseAnalytics */; };
+		927BACDB2DF609E3009A63A7 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACDA2DF609E3009A63A7 /* FirebaseAnalyticsCore */; };
+		927BACDD2DF609E3009A63A7 /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACDC2DF609E3009A63A7 /* FirebaseAnalyticsIdentitySupport */; };
+		927BACDF2DF609E3009A63A7 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACDE2DF609E3009A63A7 /* FirebaseAnalyticsOnDeviceConversion */; };
 		929E54FA2DF4A140005F2B42 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 929E54F92DF4A140005F2B42 /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
@@ -133,6 +138,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				929E54FA2DF4A140005F2B42 /* GoogleMobileAds in Frameworks */,
+				927BACDF2DF609E3009A63A7 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				927BACDD2DF609E3009A63A7 /* FirebaseAnalyticsIdentitySupport in Frameworks */,
+				927BACD72DF609E3009A63A7 /* FirebaseAI in Frameworks */,
+				927BACD92DF609E3009A63A7 /* FirebaseAnalytics in Frameworks */,
+				927BACDB2DF609E3009A63A7 /* FirebaseAnalyticsCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +240,11 @@
 			name = CartoonMe;
 			packageProductDependencies = (
 				929E54F92DF4A140005F2B42 /* GoogleMobileAds */,
+				927BACD62DF609E3009A63A7 /* FirebaseAI */,
+				927BACD82DF609E3009A63A7 /* FirebaseAnalytics */,
+				927BACDA2DF609E3009A63A7 /* FirebaseAnalyticsCore */,
+				927BACDC2DF609E3009A63A7 /* FirebaseAnalyticsIdentitySupport */,
+				927BACDE2DF609E3009A63A7 /* FirebaseAnalyticsOnDeviceConversion */,
 			);
 			productName = CartoonMe;
 			productReference = 92FB795D2DA7C7200090DB07 /* CartoonMe.app */;
@@ -321,6 +336,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				929E54F82DF4A140005F2B42 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				927BACD52DF609E3009A63A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 92FB795E2DA7C7200090DB07 /* Products */;
@@ -784,6 +800,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		927BACD52DF609E3009A63A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.14.0;
+			};
+		};
 		929E54F82DF4A140005F2B42 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads";
@@ -795,6 +819,31 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		927BACD62DF609E3009A63A7 /* FirebaseAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 927BACD52DF609E3009A63A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAI;
+		};
+		927BACD82DF609E3009A63A7 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 927BACD52DF609E3009A63A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		927BACDA2DF609E3009A63A7 /* FirebaseAnalyticsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 927BACD52DF609E3009A63A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+		927BACDC2DF609E3009A63A7 /* FirebaseAnalyticsIdentitySupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 927BACD52DF609E3009A63A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsIdentitySupport;
+		};
+		927BACDE2DF609E3009A63A7 /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 927BACD52DF609E3009A63A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
 		929E54F92DF4A140005F2B42 /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 929E54F82DF4A140005F2B42 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;

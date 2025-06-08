@@ -1,5 +1,6 @@
 import SwiftUI
 import GoogleMobileAds
+import FirebaseAnalytics
 
 struct NativeAdCard: UIViewRepresentable {
     @ObservedObject var adMobManager = AdMobManager.shared
@@ -142,6 +143,12 @@ struct NativeAdCard: UIViewRepresentable {
         nativeAdView.iconView = iconView
         nativeAdView.callToActionView = ctaButton
         nativeAdView.nativeAd = nativeAd
+        
+        // Log ad impression
+        Analytics.logEvent("ad_impression", parameters: [
+            "ad_type": "native",
+            "placement": "featured_collections"
+        ])
     }
 }
 
