@@ -7,6 +7,10 @@
 
 // CartoonMeApp.swift
 import SwiftUI
+import FirebaseCore
+import FirebaseAnalytics
+//import FirebaseCrashlytics
+//import FirebasePerformance
 #if canImport(ActivityKit)
 import ActivityKit
 #endif
@@ -16,6 +20,7 @@ struct CartoonMeApp: App {
     @State private var showLaunchAnimation = true
     
     init() {
+        FirebaseApp.configure()
         // Initialize the AdMob singleton when the app starts
         _ = AdMobManager.shared
     }

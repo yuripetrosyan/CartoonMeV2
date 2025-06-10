@@ -162,5 +162,5 @@ struct LaunchAnimationView: View {
 }
 
 #Preview(body: {
-    ThemeSelectionView(hideTabBar: .constant(true))
+    CartoonView(hideTabBar: .constant(true))
 })

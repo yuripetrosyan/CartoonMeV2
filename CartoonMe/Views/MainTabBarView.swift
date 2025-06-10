@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct MainTabBarView: View {
+    private let deviceType = DeviceType.current
+    private let layout = AdaptiveLayout()
     enum Tab: Int, CaseIterable {
         case explore, account, aiHeadshots, settings
         
@@ -47,13 +49,180 @@ struct MainTabBarView: View {
     @State private var hideTabBar: Bool = false
     
     var body: some View {
+        Group {
+            if layout.usesSidebarNavigation {
+                // iPad & visionOS: Use Sidebar Navigation
+                adaptiveSidebarView
+            } else {
+                // iPhone: Keep existing tab bar design
+                iPhoneTabBarView
+            }
+        }
+    }
+    
+    private var adaptiveSidebarView: some View {
+        NavigationSplitView {
+            // Sidebar for iPad/visionOS
+            VStack(spacing: 0) {
+                // App Header
+                VStack(spacing: layout.smallSpacing) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: deviceType == .visionOS ? 40 : 32, weight: .bold))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.purple, .blue, .pink],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .shadow(color: .purple.opacity(0.3), radius: 8, x: 0, y: 4)
+                    
+                    Text("CartoonMe")
+                        .font(.system(size: deviceType == .visionOS ? 28 : 24, weight: .bold, design: .rounded))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.white, .white.opacity(0.9)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                }
+                .padding(.top, layout.largeSpacing)
+                .padding(.bottom, layout.mediumSpacing)
+                
+                // Navigation Items
+                LazyVStack(spacing: layout.smallSpacing) {
+                    ForEach(Tab.allCases, id: \.self) { tab in
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                selectedTab = tab
+                            }
+                        }) {
+                            HStack(spacing: layout.mediumSpacing) {
+                                Image(systemName: selectedTab == tab ? tab.selectedIcon : tab.icon)
+                                    .font(.system(size: deviceType == .visionOS ? 22 : 20, weight: .semibold))
+                                    .foregroundStyle(
+                                        selectedTab == tab
+                                        ? LinearGradient(
+                                            colors: [tab.accentColor, tab.accentColor.opacity(0.8)],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                        : LinearGradient(
+                                            colors: [.white.opacity(0.8), .white.opacity(0.6)],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                    )
+                                    .frame(width: deviceType == .visionOS ? 28 : 24)
+                                
+                                Text(tab.title)
+                                    .font(.system(size: deviceType == .visionOS ? 18 : 16, weight: .semibold, design: .rounded))
+                                    .foregroundStyle(
+                                        selectedTab == tab
+                                        ? LinearGradient(
+                                            colors: [.white, .white.opacity(0.9)],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                        : LinearGradient(
+                                            colors: [.white.opacity(0.8), .white.opacity(0.6)],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                    )
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, layout.mediumSpacing)
+                            .padding(.vertical, layout.mediumSpacing)
+                            .background(
+                                RoundedRectangle(cornerRadius: layout.cornerRadius, style: .continuous)
+                                    .fill(
+                                        selectedTab == tab
+                                        ? LinearGradient(
+                                            colors: [
+                                                tab.accentColor.opacity(0.2),
+                                                tab.accentColor.opacity(0.1)
+                                            ],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                        : LinearGradient(colors: [.clear], startPoint: .top, endPoint: .bottom)
+                                    )
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(.horizontal, layout.mediumSpacing)
+                
+                Spacer()
+            }
+            .frame(minWidth: deviceType == .visionOS ? 280 : 240)
+            .background(
+                LinearGradient(
+                    colors: [
+                        Color.black.opacity(0.95),
+                        Color(red: 0.05, green: 0.05, blue: 0.1),
+                        Color(red: 0.1, green: 0.08, blue: 0.15)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+        } detail: {
+            // Main content area for iPad/visionOS
+            adaptiveContentView
+        }
+        .navigationSplitViewStyle(.balanced)
+    }
+    
+    private var adaptiveContentView: some View {
+        Group {
+            switch selectedTab {
+            case .explore:
+                NavigationStack {
+                    if deviceType == .iPhone {
+                        CartoonView(hideTabBar: $hideTabBar)
+                    } else {
+                        // Enhanced view for iPad/visionOS
+                        CartoonView(hideTabBar: $hideTabBar)
+                            .background(
+                                LinearGradient(
+                                    colors: [
+                                        Color.black,
+                                        Color(red: 0.02, green: 0.02, blue: 0.08),
+                                        Color(red: 0.05, green: 0.03, blue: 0.12),
+                                        Color.black
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                                .ignoresSafeArea()
+                            )
+                    }
+                }
+            case .account:
+                NavigationStack {
+                    TrendsView(hideTabBar: $hideTabBar)
+                }
+            case .aiHeadshots:
+                HeadshotView(hideTabBar: $hideTabBar)
+            case .settings:
+                SettingsView(hideTabBar: $hideTabBar)
+            }
+        }
+    }
+    
+    private var iPhoneTabBarView: some View {
         ZStack(alignment: .bottom) {
             // Main content area
             Group {
                 switch selectedTab {
                 case .explore:
                     NavigationStack {
-                        ThemeSelectionView(hideTabBar: $hideTabBar)
+                        CartoonView(hideTabBar: $hideTabBar)
                     }
                 case .account:
                     NavigationStack {
