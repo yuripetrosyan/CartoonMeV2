@@ -12,7 +12,7 @@ import FirebaseAnalytics
 struct CartoonView: View {
     @State private var showAllThemes = false
     @State private var scrollOffset: CGFloat = 0
-    @State private var mostPopularOffset: CGFloat = 0
+    @State private var mostPopularOffset: CGFloat = 230
     @Binding var hideTabBar: Bool
     let themes = [
         Theme(name: "Simpsons", color: .yellow, image: "SimpsonsImage", logo: nil),
@@ -50,9 +50,13 @@ struct CartoonView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(maxWidth: .infinity)
                             .clipped()
-                            .blur(radius: min(35, max(0, 220 - mostPopularOffset) / 3))
-                      
-                    
+                            .blur(radius: min(35, max(0, 220 - mostPopularOffset) / 10))
+                            .scaleEffect(mostPopularOffset < 0 ? 2.5 : 1)
+                            .saturation(mostPopularOffset < -200 ? 1.5 : 1)
+                            .animation(.smooth(duration: 0.7), value: mostPopularOffset)
+                        
+                          
+                        
                     }
                     Spacer()
                 }
@@ -133,7 +137,7 @@ struct CartoonView: View {
                             VStack(spacing: 24) {
                                 // Spacer to account for the background image
                                 Spacer()
-                                    .frame(height: 95)
+                                    .frame(height: UIScreen.main.bounds.height / 9)
                             }
                             .padding(.horizontal, 28)
                             
@@ -147,10 +151,14 @@ struct CartoonView: View {
                                 GeometryReader { geo in
                                     Color.clear
                                         .onAppear {
-                                            mostPopularOffset = geo.frame(in: .global).minY
+                                          //  mostPopularOffset = geo.frame(in: .global).minY
+                                          
                                         }
                                         .onChange(of: geo.frame(in: .global).minY) { newValue in
-                                            mostPopularOffset = newValue
+                                          //  withAnimation(.smooth(duration: 1.2)) {
+                                                mostPopularOffset = newValue
+                                          //  }
+                                         
                                         }
                                 }
                                 .frame(height: 1)
@@ -921,3 +929,5 @@ struct ViewOffsetKey: PreferenceKey {
     @State var hideTabBar = false
     return CartoonView(hideTabBar: $hideTabBar)
 }
+
+
