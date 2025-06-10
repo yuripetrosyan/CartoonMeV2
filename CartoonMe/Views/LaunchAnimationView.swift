@@ -17,7 +17,7 @@ struct LaunchAnimationView: View {
     // Calculate the final position in ThemeSelectionView
     // The rounded rectangle appears under the "Transform Your Style" title
     private var finalOffset: CGSize {
-        CGSize(width: 0, height: -250) // Moved higher on the screen
+        CGSize(width: 0, height: -285) // Moved higher on the screen
     }
     
     var body: some View {

@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		920A78F22DDE4CE500A7BC99 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 920A78F12DDE4CE500A7BC99 /* WidgetKit.framework */; };
-		920A78F42DDE4CE500A7BC99 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 920A78F32DDE4CE500A7BC99 /* SwiftUI.framework */; };
-		920A79052DDE4CE600A7BC99 /* CartoonMeWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 920A78EF2DDE4CE500A7BC99 /* CartoonMeWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		927BACD72DF609E3009A63A7 /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACD62DF609E3009A63A7 /* FirebaseAI */; };
 		927BACD92DF609E3009A63A7 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACD82DF609E3009A63A7 /* FirebaseAnalytics */; };
 		927BACDB2DF609E3009A63A7 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 927BACDA2DF609E3009A63A7 /* FirebaseAnalyticsCore */; };
@@ -19,13 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		920A79032DDE4CE600A7BC99 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 92FB79552DA7C7200090DB07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 920A78EE2DDE4CE500A7BC99;
-			remoteInfo = CartoonMeWidgetExtension;
-		};
 		92FB796E2DA7C7220090DB07 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92FB79552DA7C7200090DB07 /* Project object */;
@@ -49,7 +39,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				920A79052DDE4CE600A7BC99 /* CartoonMeWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,7 +46,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		920A78EF2DDE4CE500A7BC99 /* CartoonMeWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CartoonMeWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		920A78F12DDE4CE500A7BC99 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		920A78F32DDE4CE500A7BC99 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		92FB795D2DA7C7200090DB07 /* CartoonMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CartoonMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,22 +54,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		920A79092DDE4CE600A7BC99 /* Exceptions for "CartoonMeWidget" folder in "CartoonMeWidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 920A78EE2DDE4CE500A7BC99 /* CartoonMeWidgetExtension */;
-		};
-		920A790C2DDE4D5200A7BC99 /* Exceptions for "CartoonMe" folder in "CartoonMeWidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				CartoonMeWidget.swift,
-				Models/CartoonProcessingActivity.swift,
-				Views/DynamicIslandViews.swift,
-			);
-			target = 920A78EE2DDE4CE500A7BC99 /* CartoonMeWidgetExtension */;
-		};
 		920A790D2DDE4D5300A7BC99 /* Exceptions for "CartoonMe" folder in "CartoonMe" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -94,19 +66,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		920A78F52DDE4CE500A7BC99 /* CartoonMeWidget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				920A79092DDE4CE600A7BC99 /* Exceptions for "CartoonMeWidget" folder in "CartoonMeWidgetExtension" target */,
-			);
-			path = CartoonMeWidget;
-			sourceTree = "<group>";
-		};
 		92FB795F2DA7C7200090DB07 /* CartoonMe */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				920A790D2DDE4D5300A7BC99 /* Exceptions for "CartoonMe" folder in "CartoonMe" target */,
-				920A790C2DDE4D5200A7BC99 /* Exceptions for "CartoonMe" folder in "CartoonMeWidgetExtension" target */,
 			);
 			path = CartoonMe;
 			sourceTree = "<group>";
@@ -124,15 +87,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		920A78EC2DDE4CE500A7BC99 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				920A78F42DDE4CE500A7BC99 /* SwiftUI.framework in Frameworks */,
-				920A78F22DDE4CE500A7BC99 /* WidgetKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92FB795A2DA7C7200090DB07 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -178,7 +132,6 @@
 				92FB795F2DA7C7200090DB07 /* CartoonMe */,
 				92FB79702DA7C7220090DB07 /* CartoonMeTests */,
 				92FB797A2DA7C7220090DB07 /* CartoonMeUITests */,
-				920A78F52DDE4CE500A7BC99 /* CartoonMeWidget */,
 				920A78F02DDE4CE500A7BC99 /* Frameworks */,
 				92FB795E2DA7C7200090DB07 /* Products */,
 			);
@@ -190,7 +143,6 @@
 				92FB795D2DA7C7200090DB07 /* CartoonMe.app */,
 				92FB796D2DA7C7220090DB07 /* CartoonMeTests.xctest */,
 				92FB79772DA7C7220090DB07 /* CartoonMeUITests.xctest */,
-				920A78EF2DDE4CE500A7BC99 /* CartoonMeWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -198,28 +150,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		920A78EE2DDE4CE500A7BC99 /* CartoonMeWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 920A790A2DDE4CE600A7BC99 /* Build configuration list for PBXNativeTarget "CartoonMeWidgetExtension" */;
-			buildPhases = (
-				920A78EB2DDE4CE500A7BC99 /* Sources */,
-				920A78EC2DDE4CE500A7BC99 /* Frameworks */,
-				920A78ED2DDE4CE500A7BC99 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				920A78F52DDE4CE500A7BC99 /* CartoonMeWidget */,
-			);
-			name = CartoonMeWidgetExtension;
-			packageProductDependencies = (
-			);
-			productName = CartoonMeWidgetExtension;
-			productReference = 920A78EF2DDE4CE500A7BC99 /* CartoonMeWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		92FB795C2DA7C7200090DB07 /* CartoonMe */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92FB79812DA7C7220090DB07 /* Build configuration list for PBXNativeTarget "CartoonMe" */;
@@ -232,7 +162,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				920A79042DDE4CE600A7BC99 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				92FB795F2DA7C7200090DB07 /* CartoonMe */,
@@ -306,9 +235,6 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-					920A78EE2DDE4CE500A7BC99 = {
-						CreatedOnToolsVersion = 16.2;
-					};
 					92FB795C2DA7C7200090DB07 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -346,19 +272,11 @@
 				92FB795C2DA7C7200090DB07 /* CartoonMe */,
 				92FB796C2DA7C7220090DB07 /* CartoonMeTests */,
 				92FB79762DA7C7220090DB07 /* CartoonMeUITests */,
-				920A78EE2DDE4CE500A7BC99 /* CartoonMeWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		920A78ED2DDE4CE500A7BC99 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92FB795B2DA7C7200090DB07 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -383,13 +301,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		920A78EB2DDE4CE500A7BC99 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92FB79592DA7C7200090DB07 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -414,11 +325,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		920A79042DDE4CE600A7BC99 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 920A78EE2DDE4CE500A7BC99 /* CartoonMeWidgetExtension */;
-			targetProxy = 920A79032DDE4CE600A7BC99 /* PBXContainerItemProxy */;
-		};
 		92FB796F2DA7C7220090DB07 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 92FB795C2DA7C7200090DB07 /* CartoonMe */;
@@ -432,60 +338,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		920A79072DDE4CE600A7BC99 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZT829445M9;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CartoonMeWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CartoonMeWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.YuriPetrosyan.CartoonMe.CartoonMeWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		920A79082DDE4CE600A7BC99 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZT829445M9;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CartoonMeWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CartoonMeWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.YuriPetrosyan.CartoonMe.CartoonMeWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		92FB797F2DA7C7220090DB07 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -633,7 +485,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.YuriPetrosyan.CartoonMe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuripetrosyann.CartoonMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -669,7 +521,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.YuriPetrosyan.CartoonMe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuripetrosyann.CartoonMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -752,15 +604,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		920A790A2DDE4CE600A7BC99 /* Build configuration list for PBXNativeTarget "CartoonMeWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				920A79072DDE4CE600A7BC99 /* Debug */,
-				920A79082DDE4CE600A7BC99 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		92FB79582DA7C7200090DB07 /* Build configuration list for PBXProject "CartoonMe" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
